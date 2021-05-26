@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cjavellana.me/ecm/golan/internal/golan"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -16,4 +17,6 @@ func initLogging() {
 func main() {
 	initLogging()
 	log.Info("Hello World")
+
+	golan.StartServer()
 }

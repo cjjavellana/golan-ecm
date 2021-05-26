@@ -5,12 +5,17 @@ import (
 	"time"
 )
 
-// Object represents as the base entity from which all models are derived from.
+// Object represents the root entity from which all models should be derived from.
 // Contains fields common for all
 type Object struct {
 	// Uniquely identifies this object
 	ObjectId uuid.UUID
 
+	IsDeleted bool
+
+	Owner string
+
+	// Audit Fields
 	CreatedBy   string
 	DateCreated time.Time
 	UpdatedBy   string

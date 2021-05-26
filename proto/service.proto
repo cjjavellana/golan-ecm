@@ -1,0 +1,36 @@
+package ce;
+
+service ContentEngine {
+
+  rpc CreateWorkspace(CreateWorkspaceRequest) returns (CreateWorkspaceResponse) {}
+
+}
+
+message GetWorkspaceRequest {
+  // query for obtaining a Workspace in the format of field=value
+  //
+  // Example:
+  // objectId=xxxxxx-xxxx-xxxx
+  required string query = 1;
+}
+
+message CreateWorkspaceRequest {
+  required string workspaceName = 1;
+}
+
+message CreateWorkspaceResponse {
+  required string objectId = 1;
+}
+
+message CreateFolderRequest {
+  // The object id of the container where this folder will be created in.
+  // The object id can refer to a workspace or another folder. If parentObjectId
+  // refers to a workspace object id, this folder will be created as a top level folder.
+  // If the object refers to another folder, then this folder will be created as a child
+  // of the folder referred to by parentObjectId.
+  required string parentObjectId = 1;
+
+  // The name of the folder. Also used as the folder label.
+  required string name = 2;
+
+}
