@@ -10,16 +10,26 @@ package ce
 //			___________
 //          |          |
 //       Document	Document
-type Workspace struct {
-	// The workspace's unique name.
-	// Alphanumeric, dashes and dots. No spaces allowed
-	Name        string
+type Workspace interface {
 
-	// The human friendly name to refer to this workspace
-	Label       string
+	// GetName Returns the name of the Workspace.
+	// e.g. Legal & Sons (Law Firm)
+	GetName() string
 
+	// GetDescription returns the description for this Workspace
+	GetDescription() string
 
-	Description string
+	// GetFolders returns the Folders that are the immediate children of the
+	// Workspace
+	GetFolders() []Folder
+
+	// GetDocuments returns the Document types that the the immediate children
+	// of the Workspace
+	GetDocuments() []Document
+
+	// GetChildren returns the list of Objects that are the immediate children
+	// of the Workspace. An Object may end up being a Folder or a Document
+	GetChildren() []Object
 
 	Object
 }

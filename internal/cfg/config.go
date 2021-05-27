@@ -17,4 +17,5 @@ const (
 type Config struct {
 	StoreType StoreType
 	MongoUri  string
+	MySQLUri  string
 }

@@ -11,10 +11,13 @@ const (
 	RefTypeSoft RefType = "soft"
 
 	// RefTypeHard represents a belongs-to relationship - That is, this Object belongs to this Parent
-	RefTypeHard         = "hard"
+	RefTypeHard = "hard"
 )
 
-type Parent struct {
-	ObjectId uuid.UUID
-	RefType  RefType
+type Parent interface {
+	// GetObjectId Returns the ObjectId of the Parent Object
+	GetObjectId() uuid.UUID
+
+	// GetRefType returns the relationship this Object has with its Parent
+	GetRefType() RefType
 }

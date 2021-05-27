@@ -1,12 +1,27 @@
 package ce
 
-// CustomAttribute represents an attribute that is defined by the end-user at run time
-type CustomAttribute struct {
-	Name        string
-	Label       string
-	Description string
+import "github.com/google/uuid"
 
-	// A custom attribute must belong to a workspace
-	Workspace
+type AttributeType string
+
+const (
+	AttributeTypeString   AttributeType = "string"
+	AttributeTypeInteger                = "integer"
+	AttributeTypeDouble                 = "double"
+	AttributeTypeDateTime               = "date"
+)
+
+// CustomAttribute represents an attribute that is defined by the end-user at run time
+type CustomAttribute interface {
+	// GetName returns the name of the attribute. Alphanumeric characters only.
+	// interestRate, issueDate
+	GetName() string
+	GetLabel() string
+	GetAttributeType() AttributeType
+	GetDescription() string
+
+	// GetWorkspaceObjectId returns the ObjectId of the workspace that this attribute belongs to
+	GetWorkspaceObjectId() uuid.UUID
+
 	Object
 }
