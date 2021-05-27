@@ -6,7 +6,7 @@ import (
 	"cjavellana.me/ecm/golan/internal/core/engine/aws"
 )
 
-func Get(config cfg.Config) ce.ObjectStore {
+func Get(config cfg.AppConfig) ce.ObjectStore {
 
 	switch config.StoreType {
 	case cfg.StoreTypeAWS:

@@ -1,5 +1,11 @@
 package cfg
 
+import (
+	"github.com/go-yaml/yaml"
+	log "github.com/sirupsen/logrus"
+	"io/ioutil"
+)
+
 type StoreType string
 
 const (
@@ -14,8 +20,36 @@ const (
 	StoreTypeAWS = "aws"
 )
 
-type Config struct {
+type AppConfig struct {
 	StoreType StoreType
-	MongoUri  string
-	MySQLUri  string
+
+	// StoreConfig can accept any structure. Parsing and validation
+	// is delegated to the implementing engines
+	//
+	// Returns a map[interface{}]interface{}
+	StoreConfig interface{}
+}
+
+func ParseConfigFromYamlFile(configFile string) AppConfig {
+	fileContentAsBytes, err := ioutil.ReadFile(configFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return parseConfigYaml(fileContentAsBytes)
+}
+
+func ParseConfigFromYamlString(yamlString string) AppConfig {
+	return parseConfigYaml([]byte(yamlString))
+}
+
+func parseConfigYaml(yamlConfig []byte) AppConfig {
+	appCfg := AppConfig{}
+
+	err := yaml.Unmarshal(yamlConfig, &appCfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return appCfg
 }
