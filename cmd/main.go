@@ -1,6 +1,8 @@
 package main
 
 import (
+	"cjavellana.me/ecm/golan/internal/cfg"
+	"cjavellana.me/ecm/golan/internal/cli"
 	"cjavellana.me/ecm/golan/internal/golan"
 	log "github.com/sirupsen/logrus"
 )
@@ -16,7 +18,11 @@ func initLogging() {
 
 func main() {
 	initLogging()
-	log.Info("Hello World")
 
-	golan.StartServer()
+	golan.StartServer(getAppConfig())
+}
+
+func getAppConfig() cfg.AppConfig {
+	args := cli.ParseCli()
+	return cfg.ParseConfigFromYamlFile(args.ConfigFile)
 }

@@ -1,12 +1,13 @@
 package golan
 
 import (
+	"cjavellana.me/ecm/golan/internal/cfg"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"net"
 )
 
-func StartServer() {
+func StartServer(appCfg cfg.AppConfig) {
 	lis, err := net.Listen("tcp", ":9000")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

@@ -1,7 +1,7 @@
 package ce
 
 type Attribute interface {
-	CustomAttribute
+	PropertyField
 	SetValue(value interface{})
 	GetValue() interface{}
 }
@@ -10,9 +10,8 @@ type Document interface {
 	EnableVersioning()
 	VersionEnabled() bool
 
-	// SetAttributes defines the attributes of a document
-	SetAttributes(attributes []Attribute) error
-	GetAttributes() []Attribute
+	SetAttribute(attrs []Attribute)
+	GetAttribute() []Attribute
 
 	SetFilename(filename string)
 	GetFilename() string
