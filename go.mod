@@ -3,6 +3,7 @@ module cjavellana.me/ecm/golan
 go 1.16
 
 require (
+	github.com/go-oauth2/oauth2 v3.9.2+incompatible // indirect
 	github.com/go-yaml/yaml v2.1.0+incompatible // indirect
 	github.com/google/uuid v1.2.0 // indirect
 	github.com/mitchellh/mapstructure v1.4.1 // indirect

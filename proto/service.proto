@@ -1,6 +1,9 @@
+syntax = "proto3";
 import "reqres.proto";
 
-package ce;
+option go_package = "cjavellana.me/ecm/golan/pb";
+
+package pb;
 
 service ContentEngine {
 

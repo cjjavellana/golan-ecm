@@ -10,7 +10,7 @@ func Get(config cfg.AppConfig) ce.ObjectStore {
 
 	switch config.StoreType {
 	case cfg.StoreTypeAWS:
-		return aws.GetObjectStore()
+		return aws.GetObjectStore(&config)
 	default:
 		return nil
 	}
