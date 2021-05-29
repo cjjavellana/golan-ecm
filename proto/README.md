@@ -28,5 +28,5 @@ fi
 ## Building
 
 ```shell
-$ protoc -I=proto --go_out=./pb proto/service.proto proto/reqres.proto
+$ protoc -I=proto --go_out=. proto/service.proto proto/reqres.proto
 ```
