@@ -3,7 +3,7 @@ package main
 import (
 	"cjavellana.me/ecm/golan/internal/cfg"
 	"cjavellana.me/ecm/golan/internal/cli"
-	"cjavellana.me/ecm/golan/internal/golan"
+	"cjavellana.me/ecm/golan/internal/grpc"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -19,7 +19,7 @@ func initLogging() {
 func main() {
 	initLogging()
 
-	golan.StartServer(getAppConfig())
+	grpc.StartServer(getAppConfig())
 }
 
 func getAppConfig() cfg.AppConfig {

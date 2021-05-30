@@ -1,7 +1,8 @@
-package golan
+package grpc
 
 import (
 	"cjavellana.me/ecm/golan/internal/cfg"
+	"cjavellana.me/ecm/golan/internal/ecm"
 	"context"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -30,9 +31,12 @@ func StartServer(appCfg cfg.AppConfig) {
 		grpc.UnaryInterceptor(unaryInterceptor),
 	)
 
+	s := ecm.ServiceHandler{}
+	ecm.RegisterContentEngineServer(grpcServer, &s)
+
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %s", err)
 	}
 
-	
+
 }
