@@ -1,7 +1,7 @@
 syntax = "proto3";
-package pb;
+package ecm;
 
-option go_package = "./internal/pb";
+option go_package = "./ecm";
 
 message GetWorkspaceRequest {
   // query for obtaining a Workspace in the format of (field:comparator:value)(and|or conjunction)?

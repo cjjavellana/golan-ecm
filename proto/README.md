@@ -4,6 +4,12 @@ by this service.
 
 ## Getting Started
 
+Install Pre-requisites
+```shell
+$ go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
+$ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
+```
+
 ~/.bash_profile
 ```
 ...
@@ -28,5 +34,6 @@ fi
 ## Building
 
 ```shell
-$ protoc -I=proto --go_out=. proto/service.proto proto/reqres.proto
+$ protoc -I=proto --go_out=internal proto/reqres.proto
+$ protoc -I=proto --go-grpc_out=ecm proto/service.proto
 ```
