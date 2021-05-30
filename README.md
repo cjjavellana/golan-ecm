@@ -12,3 +12,13 @@ Golan supports OAuth2 authentication and participate in this protocol as a resou
 ## Architecture & Design
 
 ## Getting Started
+
+## Testing gRPC APIs
+
+See [https://github.com/ktr0731/evans](https://github.com/ktr0731/evans)
+
+If you're using MacOS
+```shell
+$ brew tap ktr0731/evans
+$ brew install evans
+```

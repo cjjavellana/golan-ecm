@@ -16,13 +16,15 @@ func initLogging() {
 	})
 }
 
+func getAppConfig() cfg.AppConfig {
+	args := cli.ParseCli()
+	return cfg.ParseConfigFromYamlFile(args.ConfigFile)
+}
+
 func main() {
 	initLogging()
 
 	grpc.StartServer(getAppConfig())
 }
 
-func getAppConfig() cfg.AppConfig {
-	args := cli.ParseCli()
-	return cfg.ParseConfigFromYamlFile(args.ConfigFile)
-}
+

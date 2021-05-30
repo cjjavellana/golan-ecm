@@ -37,6 +37,4 @@ func StartServer(appCfg cfg.AppConfig) {
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %s", err)
 	}
-
-
 }
