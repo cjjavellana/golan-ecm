@@ -21,6 +21,8 @@ const (
 )
 
 type AppConfig struct {
+	// GrpcPort is the port that this service will expose its GRPC services on.
+	GrpcPort  int
 	StoreType StoreType
 
 	// StoreConfig can accept any structure. Parsing and validation
@@ -44,7 +46,10 @@ func ParseConfigFromYamlString(yamlString string) AppConfig {
 }
 
 func parseConfigYaml(yamlConfig []byte) AppConfig {
-	appCfg := AppConfig{}
+	appCfg := AppConfig{
+		// Set Default Port
+		GrpcPort: 9000,
+	}
 
 	err := yaml.Unmarshal(yamlConfig, &appCfg)
 	if err != nil {

@@ -4,9 +4,11 @@ import (
 	"cjavellana.me/ecm/golan/internal/cfg"
 	"cjavellana.me/ecm/golan/internal/ecm"
 	"context"
+	"fmt"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"net"
+	"strconv"
 )
 
 func unaryInterceptor(
@@ -20,7 +22,7 @@ func unaryInterceptor(
 }
 
 func StartServer(appCfg cfg.AppConfig) {
-	lis, err := net.Listen("tcp", ":9000")
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", strconv.Itoa(appCfg.GrpcPort)))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}

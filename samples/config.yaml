@@ -1,3 +1,4 @@
+grpcport: 9000
 storetype: aws
 storeconfig:
   dynamodburi: dynamodburi

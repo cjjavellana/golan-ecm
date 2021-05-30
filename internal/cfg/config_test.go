@@ -12,6 +12,7 @@ func TestParseConfigFromYamlString(t *testing.T) {
 
 	testArgs := args{
 		yamlString: `
+grpcport: 9000
 storetype: aws
 storeconfig:
   dynamodburi: dynamodburi
@@ -24,6 +25,7 @@ storeconfig:
 	}
 
 	expected := AppConfig{
+		GrpcPort: 9000,
 		StoreType: StoreTypeAWS,
 		StoreConfig: map[interface{}]interface{}{
 			"dynamodburi":           "dynamodburi",

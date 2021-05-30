@@ -22,3 +22,16 @@ If you're using MacOS
 $ brew tap ktr0731/evans
 $ brew install evans
 ```
+
+Build & Start Golan ECM `golan/cmd/main.go`. By default, ecm will run on port 9000
+```shell
+$ go build -o ecm-exec cmd/main.go
+$ ./ecm-exec --config samples/config.yaml
+```
+
+Start Evans Cli
+```shell
+$ cd proto
+$ evans --host 127.0.0.1 --port 9000 repl --proto service.proto
+```
+![Evans](docs/evans.png?raw=true "Evans")
