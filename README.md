@@ -36,6 +36,6 @@ $ evans --host 127.0.0.1 --port 9000 repl --proto service.proto
 ```
 ![Evans](docs/evans.png?raw=true "Evans")
 
-Calling Service Using Evans
+Calling gRPC Service Using Evans
 
 ![Calling gRPC Service in Evans](docs/calling-service-in-evans.png?raw=true "Evans")
