@@ -4,7 +4,7 @@
 // 	protoc        v3.14.0
 // source: reqres.proto
 
-package ecm
+package pb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"

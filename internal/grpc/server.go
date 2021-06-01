@@ -2,7 +2,9 @@ package grpc
 
 import (
 	"cjavellana.me/ecm/golan/internal/cfg"
-	"cjavellana.me/ecm/golan/internal/ecm"
+	"cjavellana.me/ecm/golan/internal/ecm/objectfactory"
+	"cjavellana.me/ecm/golan/internal/ecm/pb"
+	"cjavellana.me/ecm/golan/internal/ecm/service"
 	"context"
 	"fmt"
 	log "github.com/sirupsen/logrus"
@@ -33,8 +35,12 @@ func StartServer(appCfg cfg.AppConfig) {
 		grpc.UnaryInterceptor(unaryInterceptor),
 	)
 
-	s := ecm.ServiceHandler{}
-	ecm.RegisterContentEngineServer(grpcServer, &s)
+	objectStore := objectfactory.GetObjectStore(appCfg)
+	s := service.ObjectStoreService{
+		ObjectStore: objectStore,
+	}
+
+	pb.RegisterContentEngineServer(grpcServer, &s)
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %s", err)
