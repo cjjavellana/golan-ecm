@@ -22,6 +22,12 @@ type Object interface {
 
 	GetObjectType() ObjectType
 
+	// GetParent returns the ObjectId of the parent of this Object
+	//
+	// Maybe nil if this object does not have a parent e.g. Workspace
+	GetParent() uuid.UUID
+	SetParent(objectId uuid.UUID)
+
 	SetCreatedBy(user string)
 	CreatedBy() string
 

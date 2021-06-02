@@ -3,10 +3,11 @@ package aws
 import (
 	"cjavellana.me/ecm/golan/internal/cfg"
 	"cjavellana.me/ecm/golan/internal/ecm/ce"
-	"errors"
+	"github.com/go-playground/validator"
 	"github.com/google/uuid"
 	"github.com/mitchellh/mapstructure"
 	log "github.com/sirupsen/logrus"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // This package contains the object store implementation for AWS.
@@ -18,17 +19,26 @@ import (
 // see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html
 //
 
-type ObjectStoreConfig struct {
-	DynamoDBURI      string
-	DynamoDBUser     string
-	DynamoDBPassword string
+type DB struct {
+	URI          string `validate:"required"`
+	User         string `validate:"required"`
+	Password     string `validate:"required"`
+	DatabaseName string `validate:"required"`
+}
 
-	ElasticSearchURI      string
-	ElasticSearchUser     string
-	ElasticSearchPassword string
+type ElasticSearch struct {
+	URI      string `validate:"required"`
+	User     string `validate:"required"`
+	Password string `validate:"required"`
+}
+
+type ObjectStoreConfig struct {
+	DB            DB
+	ElasticSearch ElasticSearch
 }
 
 type ObjectStore struct {
+	mongoClient *mongo.Client
 }
 
 func (o *ObjectStore) FindFolder() []ce.Folder {
@@ -79,7 +89,7 @@ func GetObjectStore(config *cfg.AppConfig) *ObjectStore {
 		log.Fatalf("unable to decode store config: %v", err)
 	}
 
-	err = verifyRequiredParameters(&objStoreConfig)
+	err = validateObjectStoreConfig(&objStoreConfig)
 	if err != nil {
 		log.Fatalf("unable to initialize aws object store: %v", err)
 	}
@@ -91,9 +101,12 @@ func GetObjectStore(config *cfg.AppConfig) *ObjectStore {
 	return &ObjectStore{}
 }
 
-func verifyRequiredParameters(objStoreConfig *ObjectStoreConfig) error {
-	if objStoreConfig.DynamoDBUser == "" {
-		return errors.New("dynamodb user is required")
+func validateObjectStoreConfig(objStoreConfig *ObjectStoreConfig) error {
+	validate := validator.New()
+	err := validate.Struct(objStoreConfig)
+
+	if err != nil {
+		return err
 	}
 
 	return nil

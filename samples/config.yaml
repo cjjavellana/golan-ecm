@@ -1,9 +1,12 @@
 grpcport: 9000
 storetype: aws
 storeconfig:
-  dynamodburi: dynamodburi
-  dynamodbuser: dynamodbuser
-  dynamodbpassword: dynamodbpassword
-  elasticsearchuri: elasticsearchuri
-  elasticsearchuser: elasticsearchuser
-  elasticsearchpassword: elasticsearchpassword
+  db:
+    uri: mongodb://localhost:27017
+    user: dynamodbuser
+    password: dynamodbpassword
+    databasename: golan
+  elasticsearch:
+    uri: elasticsearchuri
+    user: elasticsearchuser
+    password: elasticsearchpassword
