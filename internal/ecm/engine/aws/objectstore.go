@@ -2,7 +2,7 @@ package aws
 
 import (
 	"cjavellana.me/ecm/golan/internal/cfg"
-	ce2 "cjavellana.me/ecm/golan/internal/ecm/ce"
+	"cjavellana.me/ecm/golan/internal/ecm/ce"
 	"errors"
 	"github.com/google/uuid"
 	"github.com/mitchellh/mapstructure"
@@ -31,19 +31,41 @@ type ObjectStoreConfig struct {
 type ObjectStore struct {
 }
 
+func (o *ObjectStore) FindFolder() []ce.Folder {
+	panic("implement me")
+}
+
+func (o *ObjectStore) FindDocuments() []ce.Document {
+	panic("implement me")
+}
+
 func (o *ObjectStore) GetObjectStoreId() uuid.UUID {
 	return uuid.New()
 }
 
-func (o *ObjectStore) CreateWorkspace(workspace *ce2.Workspace) {
+func (o *ObjectStore) NewWorkspace(name string) ce.Workspace {
+	workspaceObjId := uuid.New()
+
+	log.Debugf("creating disconnected workspace: %v", workspaceObjId.String())
+
+	return &Workspace{
+		Object: Object{
+			objectId: workspaceObjId,
+		},
+
+		name: name,
+	}
+}
+
+func (o *ObjectStore) SaveWorkspace(workspace ce.Workspace) {
 	panic("implement me")
 }
 
-func (o *ObjectStore) GetWorkspaceByObjectId(objectId uuid.UUID) *ce2.Workspace {
+func (o *ObjectStore) GetWorkspaceByObjectId(objectId uuid.UUID) ce.Workspace {
 	panic("implement me")
 }
 
-func (o *ObjectStore) GetWorkspaceByName(name string) *ce2.Workspace {
+func (o *ObjectStore) GetWorkspaceByName(name string) ce.Workspace {
 	panic("implement me")
 }
 
@@ -63,6 +85,8 @@ func GetObjectStore(config *cfg.AppConfig) *ObjectStore {
 	}
 
 	log.Debugf("aws object store config: %v", objStoreConfig)
+
+	// TODO: Initialize connection to storage mediums here
 
 	return &ObjectStore{}
 }

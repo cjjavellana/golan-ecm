@@ -12,11 +12,23 @@ import "github.com/google/uuid"
 type ObjectStore interface {
 	GetObjectStoreId() uuid.UUID
 
-	// CreateWorkspace Creates a new workspace identified by the name parameter
-	CreateWorkspace(workspace *Workspace)
+	// NewWorkspace creates an instance (in memory) of Workspace without persisting it.
+	//
+	// Clients, after obtaining a reference to the instance of the newly created Workspace
+	// can set attribute attributes s
+	NewWorkspace(name string) Workspace
+
+	// SaveWorkspace persists the given Workspace
+	SaveWorkspace(workspace Workspace)
 
 	// GetWorkspaceByObjectId returns a workspace identified by the workspace's unique UUIDa
-	GetWorkspaceByObjectId(objectId uuid.UUID) *Workspace
+	GetWorkspaceByObjectId(objectId uuid.UUID) Workspace
 
-	GetWorkspaceByName(name string) *Workspace
+	GetWorkspaceByName(name string) Workspace
+
+	FindFolder() []Folder
+
+	// FindDocuments returns the documents matching the search criteria
+	// TODO: Search Criteria API
+	FindDocuments() []Document
 }

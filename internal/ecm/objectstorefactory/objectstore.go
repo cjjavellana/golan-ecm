@@ -1,4 +1,4 @@
-package objectfactory
+package objectstorefactory
 
 import (
 	"cjavellana.me/ecm/golan/internal/cfg"

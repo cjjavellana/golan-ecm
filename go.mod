@@ -4,8 +4,11 @@ go 1.16
 
 require (
 	github.com/go-oauth2/oauth2 v3.9.2+incompatible // indirect
+	github.com/go-playground/universal-translator v0.17.0 // indirect
+	github.com/go-playground/validator v9.31.0+incompatible // indirect
 	github.com/go-yaml/yaml v2.1.0+incompatible // indirect
 	github.com/google/uuid v1.2.0 // indirect
+	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	go.mongodb.org/mongo-driver v1.5.2 // indirect

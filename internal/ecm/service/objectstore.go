@@ -3,9 +3,9 @@ package service
 import (
 	"cjavellana.me/ecm/golan/internal/ecm/ce"
 	"cjavellana.me/ecm/golan/internal/ecm/pb"
-	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
+	"time"
 )
 
 type ObjectStoreService struct {
@@ -19,9 +19,11 @@ func (s *ObjectStoreService) CreateWorkspace(_ context.Context, in *pb.CreateWor
 
 	log.Infof("received create workspace request: %s", in.WorkspaceName)
 
-	objectId, _ := uuid.NewUUID()
+	w := s.ObjectStore.NewWorkspace(in.WorkspaceName)
+	w.SetCreatedBy("UserFromAuthToken")
+	w.SetDateCreated(time.Now())
 
 	return &pb.CreateWorkspaceResponse{
-		ObjectId: objectId.String(),
+		ObjectId: w.ObjectId().String(),
 	}, nil
 }

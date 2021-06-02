@@ -2,7 +2,7 @@ package grpc
 
 import (
 	"cjavellana.me/ecm/golan/internal/cfg"
-	"cjavellana.me/ecm/golan/internal/ecm/objectfactory"
+	"cjavellana.me/ecm/golan/internal/ecm/objectstorefactory"
 	"cjavellana.me/ecm/golan/internal/ecm/pb"
 	"cjavellana.me/ecm/golan/internal/ecm/service"
 	"context"
@@ -35,7 +35,7 @@ func StartServer(appCfg cfg.AppConfig) {
 		grpc.UnaryInterceptor(unaryInterceptor),
 	)
 
-	objectStore := objectfactory.GetObjectStore(appCfg)
+	objectStore := objectstorefactory.GetObjectStore(appCfg)
 	s := service.ObjectStoreService{
 		ObjectStore: objectStore,
 	}

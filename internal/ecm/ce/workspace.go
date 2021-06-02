@@ -18,6 +18,12 @@ type Workspace interface {
 
 	// GetDescription returns the description for this Workspace
 	GetDescription() string
+	SetDescription(desc string)
+
+	AddFolder(folder Folder) error
+	AddFolders(folders ...Folder) error
+	AddDocument(document Document) error
+	AddDocuments(documents ...Document) error
 
 	// GetFolders returns the Folders that are the immediate children of the
 	// Workspace
