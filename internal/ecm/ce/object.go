@@ -1,7 +1,6 @@
 package ce
 
 import (
-	"github.com/google/uuid"
 	"time"
 )
 
@@ -16,7 +15,11 @@ const (
 // Object represents the root entity from which all models should be derived from.
 // Contains fields common for all
 type Object interface {
-	ObjectId() uuid.UUID
+	ObjectId() string
+
+	// SetObjectId sets the object's id.
+	SetObjectId(objectId string)
+
 	IsDeleted() bool
 	Owner() string
 
@@ -25,8 +28,8 @@ type Object interface {
 	// GetParent returns the ObjectId of the parent of this Object
 	//
 	// Maybe nil if this object does not have a parent e.g. Workspace
-	GetParent() uuid.UUID
-	SetParent(objectId uuid.UUID)
+	GetParent() string
+	SetParent(objectId string)
 
 	SetCreatedBy(user string)
 	CreatedBy() string

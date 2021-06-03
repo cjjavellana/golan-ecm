@@ -5,7 +5,9 @@ import (
 )
 
 type Workspace struct {
-	name string
+	name        string
+	description string
+
 	*ObjectStore
 
 	Object
@@ -16,11 +18,11 @@ func (w *Workspace) GetName() string {
 }
 
 func (w *Workspace) GetDescription() string {
-	panic("implement me")
+	return w.description
 }
 
-func (Workspace) SetDescription(desc string) {
-	panic("implement me")
+func (w *Workspace) SetDescription(desc string) {
+	w.description = desc
 }
 
 func (w *Workspace) AddFolder(folder ce.Folder) error {

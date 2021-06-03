@@ -2,16 +2,15 @@ package aws
 
 import (
 	"cjavellana.me/ecm/golan/internal/ecm/ce"
-	"github.com/google/uuid"
 	"time"
 )
 
 type Object struct {
-	objectId  uuid.UUID
+	objectId  string
 	isDeleted bool
 
 	owner  string
-	parent uuid.UUID
+	parent string
 
 	createdBy   string
 	dateCreated time.Time
@@ -19,8 +18,12 @@ type Object struct {
 	dateUpdated time.Time
 }
 
-func (o *Object) ObjectId() uuid.UUID {
+func (o *Object) ObjectId() string {
 	return o.objectId
+}
+
+func (o *Object) SetObjectId(objectId string) {
+	o.objectId = objectId
 }
 
 func (o *Object) IsDeleted() bool {
@@ -67,10 +70,10 @@ func (o *Object) GetObjectType() ce.ObjectType {
 	panic("this must be overridden by structures embedding this object")
 }
 
-func (o *Object) GetParent() uuid.UUID {
+func (o *Object) GetParent() string {
 	return o.parent
 }
 
-func (o *Object) SetParent(objectId uuid.UUID) {
+func (o *Object) SetParent(objectId string) {
 	o.parent = objectId
 }

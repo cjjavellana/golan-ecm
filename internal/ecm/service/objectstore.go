@@ -24,9 +24,9 @@ func (s *ObjectStoreService) CreateWorkspace(_ context.Context, in *pb.CreateWor
 	w.SetCreatedBy("UserFromAuthToken")
 	w.SetDateCreated(time.Now())
 
-	_ = s.ObjectStore.SaveWorkspace(w)
+	w, _ = s.ObjectStore.SaveWorkspace(w)
 
 	return &pb.CreateWorkspaceResponse{
-		ObjectId: w.ObjectId().String(),
+		ObjectId: w.ObjectId(),
 	}, nil
 }

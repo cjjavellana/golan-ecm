@@ -9,6 +9,7 @@ import (
 	"github.com/mitchellh/mapstructure"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -75,32 +76,29 @@ func (o *ObjectStore) NewWorkspace(name string) ce.Workspace {
 
 	return &Workspace{
 		ObjectStore: o,
-		Object: Object{
-			objectId: workspaceObjId,
-		},
-
-		name: name,
+		name:        name,
 	}
 }
 
-func (o *ObjectStore) SaveWorkspace(workspace ce.Workspace) error {
+func (o *ObjectStore) SaveWorkspace(workspace ce.Workspace) (ce.Workspace, error) {
 
 	res, err := o.documentCollection.InsertOne(context.TODO(), bson.M{
-		"ObjectId":    workspace.ObjectId(),
 		"Name":        workspace.GetName(),
 		"Type":        workspace.GetObjectType(),
 		"Description": workspace.GetDescription(),
 	})
 	if err != nil {
-		return err
+		return workspace, err
 	}
 
-	log.Infof("workspace %s created: %s", workspace.GetName(), res.InsertedID)
+	workspace.SetObjectId(res.InsertedID.(primitive.ObjectID).Hex())
 
-	return nil
+	log.Infof("workspace %s created: %s", workspace.GetName(), workspace.ObjectId())
+
+	return workspace, nil
 }
 
-func (o *ObjectStore) GetWorkspaceByObjectId(objectId uuid.UUID) ce.Workspace {
+func (o *ObjectStore) GetWorkspaceByObjectId(objectId string) ce.Workspace {
 	panic("implement me")
 }
 
