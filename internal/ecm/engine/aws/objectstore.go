@@ -86,9 +86,10 @@ func (o *ObjectStore) NewWorkspace(name string) ce.Workspace {
 func (o *ObjectStore) SaveWorkspace(workspace ce.Workspace) error {
 
 	res, err := o.documentCollection.InsertOne(context.TODO(), bson.M{
-		"ObjectId": workspace.ObjectId(),
-		"Name":     workspace.GetName(),
-		"Type":     workspace.GetObjectType(),
+		"ObjectId":    workspace.ObjectId(),
+		"Name":        workspace.GetName(),
+		"Type":        workspace.GetObjectType(),
+		"Description": workspace.GetDescription(),
 	})
 	if err != nil {
 		return err

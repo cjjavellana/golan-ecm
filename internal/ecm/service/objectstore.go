@@ -20,6 +20,7 @@ func (s *ObjectStoreService) CreateWorkspace(_ context.Context, in *pb.CreateWor
 	log.Infof("received create workspace request: %s", in.WorkspaceName)
 
 	w := s.ObjectStore.NewWorkspace(in.WorkspaceName)
+	w.SetDescription(in.Description)
 	w.SetCreatedBy("UserFromAuthToken")
 	w.SetDateCreated(time.Now())
 

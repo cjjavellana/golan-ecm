@@ -1,7 +1,7 @@
 syntax = "proto3";
 package ecm;
 
-option go_package = "./ecm";
+option go_package = "./ecm/pb";
 
 message GetWorkspaceRequest {
   // query for obtaining a Workspace in the format of (field:comparator:value)(and|or conjunction)?
@@ -17,6 +17,7 @@ message GetWorkspaceRequest {
 
 message CreateWorkspaceRequest {
   string workspaceName = 1;
+  string description = 2;
 }
 
 message CreateWorkspaceResponse {
