@@ -53,8 +53,9 @@ type ObjectStoreConfig struct {
 }
 
 type ObjectStore struct {
-	mongoClient        *mongo.Client
-	documentCollection *mongo.Collection
+	mongoClient             *mongo.Client
+	documentCollection      *mongo.Collection
+	documentClassCollection *mongo.Collection
 }
 
 func (o *ObjectStore) FindFolder() []ce.Folder {
@@ -98,11 +99,30 @@ func (o *ObjectStore) SaveWorkspace(workspace ce.Workspace) (ce.Workspace, error
 	return workspace, nil
 }
 
-func (o *ObjectStore) GetWorkspaceByObjectId(objectId string) ce.Workspace {
-	panic("implement me")
+func (o *ObjectStore) GetWorkspaceByObjectId(objectId string) (ce.Workspace, error) {
+	id, err := primitive.ObjectIDFromHex(objectId)
+	if err != nil {
+		return nil, err
+	}
+
+	res := o.documentCollection.FindOne(context.TODO(), bson.M{
+		"_id": id,
+	})
+
+	if res.Err() != nil {
+		return nil, res.Err()
+	}
+
+	var w Workspace
+	err = res.Decode(&w)
+	if err != nil {
+		return nil, err
+	}
+
+	return &w, nil
 }
 
-func (o *ObjectStore) GetWorkspaceByName(name string) ce.Workspace {
+func (o *ObjectStore) GetWorkspaceByName(name string) (ce.Workspace, error) {
 	panic("implement me")
 }
 
@@ -125,27 +145,29 @@ func GetObjectStore(config *cfg.AppConfig) *ObjectStore {
 
 	mongoClient := initDb(&objStoreConfig)
 	database := mongoClient.Database(objStoreConfig.DB.DatabaseName)
-	documentCollection := documentCollection(database)
+	documentCollection := getMongoCollection(database, "document")
+	documentClassCollection := getMongoCollection(database, "document_class")
 
 	return &ObjectStore{
-		mongoClient:        mongoClient,
-		documentCollection: documentCollection,
+		mongoClient:             mongoClient,
+		documentCollection:      documentCollection,
+		documentClassCollection: documentClassCollection,
 	}
 }
 
-func documentCollection(database *mongo.Database) *mongo.Collection {
-	documentsCollection := database.Collection("documents")
-	if documentsCollection == nil {
+func getMongoCollection(database *mongo.Database, collection string) *mongo.Collection {
+	c := database.Collection(collection)
+	if c == nil {
 
-		err := database.CreateCollection(context.TODO(), "documents")
+		err := database.CreateCollection(context.TODO(), collection)
 		if err != nil {
-			log.Fatalf("unable to create documents collection: %v", err)
+			log.Fatalf("unable to create %s collection: %v", collection, err)
 		}
 
-		return database.Collection("documents")
+		return database.Collection(collection)
 	}
 
-	return documentsCollection
+	return c
 }
 
 func validateObjectStoreConfig(objStoreConfig *ObjectStoreConfig) error {

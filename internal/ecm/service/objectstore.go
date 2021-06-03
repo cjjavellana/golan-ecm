@@ -30,3 +30,17 @@ func (s *ObjectStoreService) CreateWorkspace(_ context.Context, in *pb.CreateWor
 		ObjectId: w.ObjectId(),
 	}, nil
 }
+
+func (s *ObjectStoreService) GetWorkspace(_ context.Context, in *pb.GetWorkspaceRequest) (*pb.GetWorkspaceResponse, error) {
+
+	log.Infof("received get workspace query: %s", in.Query)
+
+	w, err := s.ObjectStore.GetWorkspaceByObjectId(in.GetQuery())
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.GetWorkspaceResponse{
+		ObjectId: w.ObjectId(),
+	}, nil
+}

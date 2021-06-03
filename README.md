@@ -20,6 +20,8 @@ Starting MongoDB
 $ docker compose up -d mongo mongo-express
 ```
 
+You can access the Web-based mongo client at: [http://localhost:8081/](http://localhost:8081/)
+
 ## Testing gRPC APIs
 
 See [https://github.com/ktr0731/evans](https://github.com/ktr0731/evans)

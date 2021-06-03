@@ -18,7 +18,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ContentEngineClient interface {
+	// CreateWorkspace creates a new workspace.
 	CreateWorkspace(ctx context.Context, in *CreateWorkspaceRequest, opts ...grpc.CallOption) (*CreateWorkspaceResponse, error)
+	GetWorkspace(ctx context.Context, in *GetWorkspaceRequest, opts ...grpc.CallOption) (*GetWorkspaceResponse, error)
 }
 
 type contentEngineClient struct {
@@ -38,11 +40,22 @@ func (c *contentEngineClient) CreateWorkspace(ctx context.Context, in *CreateWor
 	return out, nil
 }
 
+func (c *contentEngineClient) GetWorkspace(ctx context.Context, in *GetWorkspaceRequest, opts ...grpc.CallOption) (*GetWorkspaceResponse, error) {
+	out := new(GetWorkspaceResponse)
+	err := c.cc.Invoke(ctx, "/ecm.ContentEngine/GetWorkspace", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ContentEngineServer is the server API for ContentEngine service.
 // All implementations must embed UnimplementedContentEngineServer
 // for forward compatibility
 type ContentEngineServer interface {
+	// CreateWorkspace creates a new workspace.
 	CreateWorkspace(context.Context, *CreateWorkspaceRequest) (*CreateWorkspaceResponse, error)
+	GetWorkspace(context.Context, *GetWorkspaceRequest) (*GetWorkspaceResponse, error)
 	mustEmbedUnimplementedContentEngineServer()
 }
 
@@ -52,6 +65,9 @@ type UnimplementedContentEngineServer struct {
 
 func (UnimplementedContentEngineServer) CreateWorkspace(context.Context, *CreateWorkspaceRequest) (*CreateWorkspaceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateWorkspace not implemented")
+}
+func (UnimplementedContentEngineServer) GetWorkspace(context.Context, *GetWorkspaceRequest) (*GetWorkspaceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWorkspace not implemented")
 }
 func (UnimplementedContentEngineServer) mustEmbedUnimplementedContentEngineServer() {}
 
@@ -84,6 +100,24 @@ func _ContentEngine_CreateWorkspace_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ContentEngine_GetWorkspace_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetWorkspaceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ContentEngineServer).GetWorkspace(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ecm.ContentEngine/GetWorkspace",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ContentEngineServer).GetWorkspace(ctx, req.(*GetWorkspaceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ContentEngine_ServiceDesc is the grpc.ServiceDesc for ContentEngine service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -94,6 +128,10 @@ var ContentEngine_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateWorkspace",
 			Handler:    _ContentEngine_CreateWorkspace_Handler,
+		},
+		{
+			MethodName: "GetWorkspace",
+			Handler:    _ContentEngine_GetWorkspace_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

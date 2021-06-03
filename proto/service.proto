@@ -7,7 +7,9 @@ package ecm;
 
 service ContentEngine {
 
+  // CreateWorkspace creates a new workspace.
   rpc CreateWorkspace(CreateWorkspaceRequest) returns (CreateWorkspaceResponse) {}
 
+  rpc GetWorkspace(GetWorkspaceRequest) returns (GetWorkspaceResponse) {}
 }
 

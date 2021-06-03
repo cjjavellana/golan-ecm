@@ -15,6 +15,10 @@ message GetWorkspaceRequest {
   string query = 1;
 }
 
+message GetWorkspaceResponse {
+  string objectId = 1;
+}
+
 message CreateWorkspaceRequest {
   string workspaceName = 1;
   string description = 2;

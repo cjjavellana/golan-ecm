@@ -23,9 +23,9 @@ type ObjectStore interface {
 	SaveWorkspace(workspace Workspace) (Workspace, error)
 
 	// GetWorkspaceByObjectId returns a workspace identified by the workspace's unique id
-	GetWorkspaceByObjectId(objectId string) Workspace
+	GetWorkspaceByObjectId(objectId string) (Workspace, error)
 
-	GetWorkspaceByName(name string) Workspace
+	GetWorkspaceByName(name string) (Workspace, error)
 
 	FindFolder() []Folder
 
