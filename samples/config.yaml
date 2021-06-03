@@ -3,8 +3,9 @@ storetype: aws
 storeconfig:
   db:
     uri: mongodb://localhost:27017
-    user: dynamodbuser
-    password: dynamodbpassword
+    # Same as the mongodb root username & password in docker-compose.yml
+    user: root
+    password: example
     databasename: golan
   elasticsearch:
     uri: elasticsearchuri

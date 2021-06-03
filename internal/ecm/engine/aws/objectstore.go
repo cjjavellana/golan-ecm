@@ -39,6 +39,7 @@ type ObjectStoreConfig struct {
 
 type ObjectStore struct {
 	mongoClient *mongo.Client
+	database    *mongo.Database
 }
 
 func (o *ObjectStore) FindFolder() []ce.Folder {
@@ -96,9 +97,13 @@ func GetObjectStore(config *cfg.AppConfig) *ObjectStore {
 
 	log.Debugf("aws object store config: %v", objStoreConfig)
 
-	// TODO: Initialize connection to storage mediums here
+	mongoClient := initDb(&objStoreConfig)
+	database := mongoClient.Database(objStoreConfig.DB.DatabaseName)
 
-	return &ObjectStore{}
+	return &ObjectStore{
+		mongoClient: mongoClient,
+		database:    database,
+	}
 }
 
 func validateObjectStoreConfig(objStoreConfig *ObjectStoreConfig) error {

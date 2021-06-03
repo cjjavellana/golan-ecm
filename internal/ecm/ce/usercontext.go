@@ -1,10 +1,19 @@
 package ce
 
 type UserContext struct {
-	username    string
+	userId      string
 	displayName string
+	roles       []Role
 }
 
-func NewUserContext() *UserContext {
-	return &UserContext{}
+func NewUserContext(
+	userId string,
+	displayName string,
+	roles []Role,
+) *UserContext {
+	return &UserContext{
+		userId:      userId,
+		displayName: displayName,
+		roles:       roles,
+	}
 }

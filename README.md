@@ -13,6 +13,13 @@ Golan supports OAuth2 authentication and participate in this protocol as a resou
 
 ## Getting Started
 
+### Developing for DocumentDB / MongoDB
+
+Starting MongoDB
+```shell
+$ docker compose up -d mongo mongo-express
+```
+
 ## Testing gRPC APIs
 
 See [https://github.com/ktr0731/evans](https://github.com/ktr0731/evans)
