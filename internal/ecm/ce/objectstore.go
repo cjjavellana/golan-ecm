@@ -19,7 +19,8 @@ type ObjectStore interface {
 	NewWorkspace(name string) Workspace
 
 	// SaveWorkspace persists the given Workspace
-	SaveWorkspace(workspace Workspace)
+	// returns an error when there is an error persisting the workspace
+	SaveWorkspace(workspace Workspace) error
 
 	// GetWorkspaceByObjectId returns a workspace identified by the workspace's unique UUIDa
 	GetWorkspaceByObjectId(objectId uuid.UUID) Workspace

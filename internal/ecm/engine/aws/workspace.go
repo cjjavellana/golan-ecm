@@ -6,6 +6,7 @@ import (
 
 type Workspace struct {
 	name string
+	*ObjectStore
 
 	Object
 }

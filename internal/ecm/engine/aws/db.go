@@ -16,28 +16,29 @@ func initDb(config *ObjectStoreConfig) *mongo.Client {
 	defer initLock.Unlock()
 
 	initLock.Lock()
+	if conn == nil {
+		credentials := options.Credential{
+			AuthMechanism: "SCRAM-SHA-256",
+			Username:      config.DB.User,
+			Password:      config.DB.Password,
+		}
 
-	credentials := options.Credential{
-		AuthMechanism: "SCRAM-SHA-256",
-		Username:      config.DB.User,
-		Password:      config.DB.Password,
+		var err error
+		conn, err = mongo.Connect(
+			context.TODO(),
+			options.Client().SetAuth(credentials).ApplyURI(config.DB.URI),
+		)
+		if err != nil {
+			log.Fatalf("unable to connect to object store database: %v", err)
+		}
+
+		err = conn.Ping(context.TODO(), readpref.Primary())
+		if err != nil {
+			log.Fatalf("unable to connect to object store database: %v", err)
+		}
+
+		log.Infof("succesfully connected to object store database %s", config.DB.DatabaseName)
 	}
-
-	var err error
-	conn, err = mongo.Connect(
-		context.TODO(),
-		options.Client().SetAuth(credentials).ApplyURI(config.DB.URI),
-	)
-	if err != nil {
-		log.Fatalf("unable to connect to object store database: %v", err)
-	}
-
-	err = conn.Ping(context.TODO(), readpref.Primary())
-	if err != nil {
-		log.Fatalf("unable to connect to object store database: %v", err)
-	}
-
-	log.Infof("succesfully connected to object store database %s", config.DB.DatabaseName)
 
 	return conn
 }
