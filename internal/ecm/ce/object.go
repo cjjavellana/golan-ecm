@@ -17,8 +17,8 @@ const (
 type Object interface {
 	ObjectId() string
 
-	IsDeleted() bool
-	Owner() string
+	GetIsDeleted() bool
+	GetOwner() string
 
 	GetObjectType() ObjectType
 
@@ -26,17 +26,17 @@ type Object interface {
 	//
 	// Maybe nil if this object does not have a parent e.g. Workspace
 	GetParent() string
-	SetParent(objectId string)
+	SetParent(objectId string) error
 
 	SetCreatedBy(user string)
-	CreatedBy() string
+	GetCreatedBy() string
 
-	SetDateCreated(dateCreated time.Time)
-	DateCreated() time.Time
+	SetDateCreated(dateCreated *time.Time)
+	GetDateCreated() *time.Time
 
 	SetUpdatedBy(user string)
-	UpdatedBy() string
+	GetUpdatedBy() string
 
-	SetDateUpdated(dateUpdated time.Time)
-	DateUpdated() time.Time
+	SetDateUpdated(dateUpdated *time.Time)
+	GetDateUpdated() *time.Time
 }

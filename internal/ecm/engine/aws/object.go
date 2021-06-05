@@ -7,60 +7,60 @@ import (
 )
 
 type Object struct {
-	ID        primitive.ObjectID `bson:"_id"`
-	isDeleted bool
+	ID        primitive.ObjectID `bson:"_id,omitempty"`
+	IsDeleted bool               `bson:"IsDeleted"`
 
-	owner  string
-	parent string
+	Owner  string             `bson:"Owner,omitempty"`
+	Parent primitive.ObjectID `bson:"Parent,omitempty"`
 
-	createdBy   string    `bson:"CreatedBy"`
-	dateCreated time.Time `bson:"DateCreated"`
-	updatedBy   string    `bson:"UpdatedBy"`
-	dateUpdated time.Time `bson:"DateUpdated"`
+	CreatedBy   string     `bson:"CreatedBy,omitempty"`
+	DateCreated *time.Time `bson:"DateCreated,omitempty"`
+	UpdatedBy   string     `bson:"UpdatedBy,omitempty"`
+	DateUpdated *time.Time `bson:"DateUpdated,omitempty"`
 }
 
 func (o *Object) ObjectId() string {
 	return o.ID.Hex()
 }
 
-func (o *Object) IsDeleted() bool {
-	return o.isDeleted
+func (o *Object) GetIsDeleted() bool {
+	return o.IsDeleted
 }
 
-func (o *Object) Owner() string {
-	return o.owner
+func (o *Object) GetOwner() string {
+	return o.Owner
 }
 
 func (o *Object) SetCreatedBy(user string) {
-	o.createdBy = user
+	o.CreatedBy = user
 }
 
-func (o *Object) CreatedBy() string {
-	return o.createdBy
+func (o *Object) GetCreatedBy() string {
+	return o.CreatedBy
 }
 
-func (o *Object) SetDateCreated(dateCreated time.Time) {
-	o.dateCreated = dateCreated
+func (o *Object) SetDateCreated(dateCreated *time.Time) {
+	o.DateCreated = dateCreated
 }
 
-func (o *Object) DateCreated() time.Time {
-	return o.dateCreated
+func (o *Object) GetDateCreated() *time.Time {
+	return o.DateCreated
 }
 
 func (o *Object) SetUpdatedBy(user string) {
-	o.updatedBy = user
+	o.UpdatedBy = user
 }
 
-func (o *Object) UpdatedBy() string {
-	return o.updatedBy
+func (o *Object) GetUpdatedBy() string {
+	return o.UpdatedBy
 }
 
-func (o *Object) SetDateUpdated(dateUpdated time.Time) {
-	o.dateUpdated = dateUpdated
+func (o *Object) SetDateUpdated(dateUpdated *time.Time) {
+	o.DateUpdated = dateUpdated
 }
 
-func (o *Object) DateUpdated() time.Time {
-	return o.dateUpdated
+func (o *Object) GetDateUpdated() *time.Time {
+	return o.DateUpdated
 }
 
 func (o *Object) GetObjectType() ce.ObjectType {
@@ -68,9 +68,15 @@ func (o *Object) GetObjectType() ce.ObjectType {
 }
 
 func (o *Object) GetParent() string {
-	return o.parent
+	return o.Parent.Hex()
 }
 
-func (o *Object) SetParent(objectId string) {
-	o.parent = objectId
+func (o *Object) SetParent(objectId string) error {
+	id, ok := primitive.ObjectIDFromHex(objectId)
+	if ok != nil {
+		return ok
+	}
+
+	o.Parent = id
+	return nil
 }

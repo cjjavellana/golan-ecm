@@ -5,12 +5,14 @@ import (
 )
 
 type Workspace struct {
+	// These fields are persisted
+	// Data fields are persisted to the underlying store
 	Name        string `bson:"Name"`
 	Description string `bson:"Description"`
-
-	*ObjectStore
-
 	Object `bson:",inline"`
+
+	// Non-persisted, transient fields
+	objectStore *ObjectStore
 }
 
 func (w *Workspace) GetName() string {

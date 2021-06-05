@@ -76,18 +76,18 @@ func (o *ObjectStore) NewWorkspace(name string) ce.Workspace {
 	log.Debugf("creating disconnected workspace: %v", workspaceObjId.String())
 
 	return &Workspace{
-		ObjectStore: o,
+		objectStore: o,
 		Name:        name,
 	}
 }
 
 func (o *ObjectStore) SaveWorkspace(workspace ce.Workspace) (ce.Workspace, error) {
+	m, ok := bson.Marshal(workspace)
+	if ok != nil {
+		return workspace, ok
+	}
 
-	res, err := o.documentCollection.InsertOne(context.TODO(), bson.M{
-		"Name":        workspace.GetName(),
-		"Type":        workspace.GetObjectType(),
-		"Description": workspace.GetDescription(),
-	})
+	res, err := o.documentCollection.InsertOne(context.TODO(), m)
 	if err != nil {
 		return workspace, err
 	}
@@ -121,7 +121,7 @@ func (o *ObjectStore) GetWorkspaceByObjectId(objectId string) (ce.Workspace, err
 		return nil, err
 	}
 
-	w.ObjectStore = o
+	w.objectStore = o
 
 	return &w, nil
 }
