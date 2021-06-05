@@ -5,24 +5,24 @@ import (
 )
 
 type Workspace struct {
-	name        string
-	description string
+	Name        string `bson:"Name"`
+	Description string `bson:"Description"`
 
 	*ObjectStore
 
-	Object
+	Object `bson:",inline"`
 }
 
 func (w *Workspace) GetName() string {
-	return w.name
+	return w.Name
 }
 
 func (w *Workspace) GetDescription() string {
-	return w.description
+	return w.Description
 }
 
 func (w *Workspace) SetDescription(desc string) {
-	w.description = desc
+	w.Description = desc
 }
 
 func (w *Workspace) AddFolder(folder ce.Folder) error {

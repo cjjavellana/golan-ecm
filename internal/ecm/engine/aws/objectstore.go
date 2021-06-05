@@ -77,7 +77,7 @@ func (o *ObjectStore) NewWorkspace(name string) ce.Workspace {
 
 	return &Workspace{
 		ObjectStore: o,
-		name:        name,
+		Name:        name,
 	}
 }
 
@@ -92,7 +92,7 @@ func (o *ObjectStore) SaveWorkspace(workspace ce.Workspace) (ce.Workspace, error
 		return workspace, err
 	}
 
-	workspace.SetObjectId(res.InsertedID.(primitive.ObjectID).Hex())
+	workspace.SetObjectId(res.InsertedID.(primitive.ObjectID))
 
 	log.Infof("workspace %s created: %s", workspace.GetName(), workspace.ObjectId())
 
@@ -118,6 +118,8 @@ func (o *ObjectStore) GetWorkspaceByObjectId(objectId string) (ce.Workspace, err
 	if err != nil {
 		return nil, err
 	}
+
+	w.ObjectStore = o
 
 	return &w, nil
 }
@@ -145,7 +147,7 @@ func GetObjectStore(config *cfg.AppConfig) *ObjectStore {
 
 	mongoClient := initDb(&objStoreConfig)
 	database := mongoClient.Database(objStoreConfig.DB.DatabaseName)
-	documentCollection := getMongoCollection(database, "document")
+	documentCollection := getMongoCollection(database, "documents")
 	documentClassCollection := getMongoCollection(database, "document_class")
 
 	return &ObjectStore{

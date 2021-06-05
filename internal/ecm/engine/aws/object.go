@@ -2,28 +2,29 @@ package aws
 
 import (
 	"cjavellana.me/ecm/golan/internal/ecm/ce"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )
 
 type Object struct {
-	objectId  string
+	ID        primitive.ObjectID `bson:"_id"`
 	isDeleted bool
 
 	owner  string
 	parent string
 
-	createdBy   string
-	dateCreated time.Time
-	updatedBy   string
-	dateUpdated time.Time
+	createdBy   string    `bson:"CreatedBy"`
+	dateCreated time.Time `bson:"DateCreated"`
+	updatedBy   string    `bson:"UpdatedBy"`
+	dateUpdated time.Time `bson:"DateUpdated"`
 }
 
-func (o *Object) ObjectId() string {
-	return o.objectId
+func (o *Object) ObjectId() interface{} {
+	return o.ID.Hex()
 }
 
-func (o *Object) SetObjectId(objectId string) {
-	o.objectId = objectId
+func (o *Object) SetObjectId(objectId interface{}) {
+	o.ID = objectId.(primitive.ObjectID)
 }
 
 func (o *Object) IsDeleted() bool {
