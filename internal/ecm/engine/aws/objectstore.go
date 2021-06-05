@@ -53,9 +53,9 @@ type ObjectStoreConfig struct {
 }
 
 type ObjectStore struct {
-	mongoClient             *mongo.Client
-	documentCollection      *mongo.Collection
-	documentClassCollection *mongo.Collection
+	mongoClient        *mongo.Client
+	docCollection      *mongo.Collection
+	docClassCollection *mongo.Collection
 }
 
 func (o *ObjectStore) FindFolder() []ce.Folder {
@@ -70,14 +70,20 @@ func (o *ObjectStore) GetObjectStoreId() uuid.UUID {
 	return uuid.New()
 }
 
-func (o *ObjectStore) NewWorkspace(name string) ce.Workspace {
-	workspaceObjId := uuid.New()
-
-	log.Debugf("creating disconnected workspace: %v", workspaceObjId.String())
-
+func (o *ObjectStore) NewWorkspace(name string, description string) ce.Workspace {
 	return &Workspace{
 		objectStore: o,
 		Name:        name,
+		Description: description,
+		Type: ce.ObjectTypeWorkspace,
+	}
+}
+
+func (o *ObjectStore) NewDocumentClass(name string, label string, description string) ce.DocumentClass {
+	return &DocumentClass{
+		Name:        name,
+		Label:       label,
+		Description: description,
 	}
 }
 
@@ -87,7 +93,7 @@ func (o *ObjectStore) SaveWorkspace(workspace ce.Workspace) (ce.Workspace, error
 		return workspace, ok
 	}
 
-	res, err := o.documentCollection.InsertOne(context.TODO(), m)
+	res, err := o.docCollection.InsertOne(context.TODO(), m)
 	if err != nil {
 		return workspace, err
 	}
@@ -107,7 +113,7 @@ func (o *ObjectStore) GetWorkspaceByObjectId(objectId string) (ce.Workspace, err
 		return nil, err
 	}
 
-	res := o.documentCollection.FindOne(context.TODO(), bson.M{
+	res := o.docCollection.FindOne(context.TODO(), bson.M{
 		"_id": id,
 	})
 
@@ -153,9 +159,9 @@ func GetObjectStore(config *cfg.AppConfig) *ObjectStore {
 	documentClassCollection := getMongoCollection(database, "document_class")
 
 	return &ObjectStore{
-		mongoClient:             mongoClient,
-		documentCollection:      documentCollection,
-		documentClassCollection: documentClassCollection,
+		mongoClient:        mongoClient,
+		docCollection:      documentCollection,
+		docClassCollection: documentClassCollection,
 	}
 }
 

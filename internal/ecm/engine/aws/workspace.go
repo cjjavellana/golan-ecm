@@ -9,7 +9,9 @@ type Workspace struct {
 	// Data fields are persisted to the underlying store
 	Name        string `bson:"Name"`
 	Description string `bson:"Description"`
-	Object `bson:",inline"`
+	Type        ce.ObjectType `bson:"Type"`
+
+	Object      `bson:",inline"`
 
 	// Non-persisted, transient fields
 	objectStore *ObjectStore
@@ -56,5 +58,5 @@ func (w *Workspace) GetChildren() []ce.Object {
 }
 
 func (w *Workspace) GetObjectType() ce.ObjectType {
-	return ce.ObjectTypeWorkspace
+	return w.Type
 }

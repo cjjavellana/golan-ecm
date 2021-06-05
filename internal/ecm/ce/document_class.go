@@ -2,6 +2,13 @@ package ce
 
 // DocumentClass represents a category of a document
 type DocumentClass interface {
+
+	// GetWorkspaceId returns the Id of the workspace that owns this DocumentClass
+	GetWorkspaceId() string
+
+	// SetWorkspaceId assigns the workspace owner of this DocumentClass
+	SetWorkspaceId(objectId string) error
+
 	// GetName returns the name of the DocumentClass.
 	// e.g. PolicyDocument, MedicalDocument_XRay, MedicalDocument_Cardio
 	GetName() string

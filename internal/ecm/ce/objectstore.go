@@ -12,11 +12,14 @@ import "github.com/google/uuid"
 type ObjectStore interface {
 	GetObjectStoreId() uuid.UUID
 
-	// NewWorkspace creates an instance (in memory) of Workspace without persisting it.
+	// NewWorkspace creates an instance (in memory) of a Workspace without persisting it.
 	//
-	// Clients, after obtaining a reference to the instance of the newly created Workspace
-	// can set attribute attributes s
-	NewWorkspace(name string) Workspace
+	// Clients can set additional attributes after obtaining a reference to the Workspace instance
+	// before calling SaveWorkspace
+	NewWorkspace(name string, description string) Workspace
+
+	// NewDocumentClass creates an instance of a DocumentClass without persisting it
+	NewDocumentClass(name string, label string, description string) DocumentClass
 
 	// SaveWorkspace persists the given Workspace
 	// returns an error when there is an error persisting the workspace
