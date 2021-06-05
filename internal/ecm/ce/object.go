@@ -15,10 +15,7 @@ const (
 // Object represents the root entity from which all models should be derived from.
 // Contains fields common for all
 type Object interface {
-	ObjectId() interface{}
-
-	// SetObjectId sets the object's id.
-	SetObjectId(objectId interface{})
+	ObjectId() string
 
 	IsDeleted() bool
 	Owner() string

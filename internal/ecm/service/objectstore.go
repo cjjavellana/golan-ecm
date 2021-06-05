@@ -27,7 +27,7 @@ func (s *ObjectStoreService) CreateWorkspace(_ context.Context, in *pb.CreateWor
 	w, _ = s.ObjectStore.SaveWorkspace(w)
 
 	return &pb.CreateWorkspaceResponse{
-		ObjectId: w.ObjectId().(string),
+		ObjectId: w.ObjectId(),
 	}, nil
 }
 
@@ -41,6 +41,6 @@ func (s *ObjectStoreService) GetWorkspace(_ context.Context, in *pb.GetWorkspace
 	}
 
 	return &pb.GetWorkspaceResponse{
-		ObjectId: w.ObjectId().(string),
+		ObjectId: w.ObjectId(),
 	}, nil
 }

@@ -92,7 +92,9 @@ func (o *ObjectStore) SaveWorkspace(workspace ce.Workspace) (ce.Workspace, error
 		return workspace, err
 	}
 
-	workspace.SetObjectId(res.InsertedID.(primitive.ObjectID))
+	// cast the interface to a struct so that we can assign the generated id
+	v := workspace.(*Workspace)
+	v.ID = res.InsertedID.(primitive.ObjectID)
 
 	log.Infof("workspace %s created: %s", workspace.GetName(), workspace.ObjectId())
 

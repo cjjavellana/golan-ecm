@@ -19,12 +19,8 @@ type Object struct {
 	dateUpdated time.Time `bson:"DateUpdated"`
 }
 
-func (o *Object) ObjectId() interface{} {
+func (o *Object) ObjectId() string {
 	return o.ID.Hex()
-}
-
-func (o *Object) SetObjectId(objectId interface{}) {
-	o.ID = objectId.(primitive.ObjectID)
 }
 
 func (o *Object) IsDeleted() bool {
