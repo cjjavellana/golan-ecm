@@ -21,8 +21,7 @@ func (s *ObjectStoreService) CreateWorkspace(_ context.Context, in *pb.CreateWor
 
 	now := time.Now()
 
-	w := s.ObjectStore.NewWorkspace(in.WorkspaceName)
-	w.SetDescription(in.Description)
+	w := s.ObjectStore.NewWorkspace(in.WorkspaceName, in.Description)
 	w.SetCreatedBy("UserFromAuthToken")
 	w.SetDateCreated(&now)
 
