@@ -11,5 +11,7 @@ service ContentEngine {
   rpc CreateWorkspace(CreateWorkspaceRequest) returns (CreateWorkspaceResponse) {}
 
   rpc GetWorkspace(GetWorkspaceRequest) returns (GetWorkspaceResponse) {}
+
+  rpc CreateDocumentClass(CreateDocumentClassRequest) returns (CreateDocumentClassResponse) {}
 }
 

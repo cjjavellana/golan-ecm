@@ -71,6 +71,9 @@ func (o *ObjectStore) GetObjectStoreId() uuid.UUID {
 }
 
 func (o *ObjectStore) NewWorkspace(name string, description string) ce.Workspace {
+
+	// TODO: Check if name already exists
+
 	return &Workspace{
 		objectStore: o,
 		Name:        name,
@@ -105,6 +108,11 @@ func (o *ObjectStore) SaveWorkspace(workspace ce.Workspace) (ce.Workspace, error
 	log.Infof("workspace %s created: %s", workspace.GetName(), workspace.ObjectId())
 
 	return workspace, nil
+}
+
+func (o *ObjectStore) SaveDocumentClass(documentClass ce.DocumentClass) (ce.DocumentClass, error) {
+
+	panic("implement me")
 }
 
 func (o *ObjectStore) GetWorkspaceByObjectId(objectId string) (ce.Workspace, error) {
@@ -155,13 +163,13 @@ func GetObjectStore(config *cfg.AppConfig) *ObjectStore {
 
 	mongoClient := initDb(&objStoreConfig)
 	database := mongoClient.Database(objStoreConfig.DB.DatabaseName)
-	documentCollection := getMongoCollection(database, "documents")
-	documentClassCollection := getMongoCollection(database, "document_class")
+	docCollection := getMongoCollection(database, "documents")
+	docClassCollection := getMongoCollection(database, "document_class")
 
 	return &ObjectStore{
 		mongoClient:        mongoClient,
-		docCollection:      documentCollection,
-		docClassCollection: documentClassCollection,
+		docCollection:      docCollection,
+		docClassCollection: docClassCollection,
 	}
 }
 

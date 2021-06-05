@@ -25,6 +25,9 @@ type ObjectStore interface {
 	// returns an error when there is an error persisting the workspace
 	SaveWorkspace(workspace Workspace) (Workspace, error)
 
+	// SaveDocumentClass persists the given document class
+	SaveDocumentClass(documentClass DocumentClass) (DocumentClass, error)
+
 	// GetWorkspaceByObjectId returns a workspace identified by the workspace's unique id
 	GetWorkspaceByObjectId(objectId string) (Workspace, error)
 

@@ -40,3 +40,40 @@ message CreateFolderRequest {
   string name = 2;
 
 }
+
+message PropertyField {
+  string propertyFieldId = 1;
+  string documentClassId = 2;
+
+  string name = 3;
+  string label = 4;
+  string description = 5;
+
+  // a regex validation expression
+  string validationExpr = 6;
+}
+
+message CreateDocumentClassRequest {
+  // The id of the workspace where this document class
+  // should belong to
+  string workspaceId = 1;
+  string name = 2;
+  string label = 3;
+  string description = 4;
+
+  // The properties of a document class
+  //
+  // Property fields are scoped by the document class thus, it is possible that a property
+  // field of the same name may have different behavior (validation, evaluation expressions)
+  // across different document classes
+  repeated PropertyField propertyFields = 5;
+}
+
+message CreateDocumentClassResponse {
+  string workspaceId = 1;
+  string objectId = 2;
+  string name = 3;
+  string label = 4;
+  string description = 5;
+  repeated PropertyField propertyFields = 6;
+}

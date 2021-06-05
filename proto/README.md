@@ -34,6 +34,6 @@ fi
 ## Building
 
 ```shell
-$ protoc -I=proto --go_out=internal proto/reqres.proto && \
+$ protoc --experimental_allow_proto3_optional -I=proto --go_out=internal proto/reqres.proto && \
 protoc -I=proto --go-grpc_out=internal proto/service.proto
 ```

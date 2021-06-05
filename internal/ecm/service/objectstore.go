@@ -45,3 +45,29 @@ func (s *ObjectStoreService) GetWorkspace(_ context.Context, in *pb.GetWorkspace
 		ObjectId: w.ObjectId(),
 	}, nil
 }
+
+func (s *ObjectStoreService) CreateDocumentClass(
+	_ context.Context,
+	in *pb.CreateDocumentClassRequest) (*pb.CreateDocumentClassResponse, error) {
+
+	docClass := s.ObjectStore.NewDocumentClass(in.Name, in.Label, in.Description)
+
+	err := docClass.SetWorkspaceId(in.WorkspaceId)
+	if err != nil {
+		// an error may be returned when the given workspace id
+		// cannot converted to a valid mongodb id
+		return nil, err
+	}
+
+	docClass, err = s.ObjectStore.SaveDocumentClass(docClass)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.CreateDocumentClassResponse{
+		ObjectId:    docClass.ObjectId(),
+		Name:        in.Name,
+		Label:       in.Label,
+		Description: in.Description,
+	}, nil
+}

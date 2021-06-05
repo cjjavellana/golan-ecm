@@ -285,6 +285,267 @@ func (x *CreateFolderRequest) GetName() string {
 	return ""
 }
 
+type PropertyField struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	PropertyFieldId string `protobuf:"bytes,1,opt,name=propertyFieldId,proto3" json:"propertyFieldId,omitempty"`
+	DocumentClassId string `protobuf:"bytes,2,opt,name=documentClassId,proto3" json:"documentClassId,omitempty"`
+	Name            string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Label           string `protobuf:"bytes,4,opt,name=label,proto3" json:"label,omitempty"`
+	Description     string `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	// a regex validation expression
+	ValidationExpr string `protobuf:"bytes,6,opt,name=validationExpr,proto3" json:"validationExpr,omitempty"`
+}
+
+func (x *PropertyField) Reset() {
+	*x = PropertyField{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_reqres_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PropertyField) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PropertyField) ProtoMessage() {}
+
+func (x *PropertyField) ProtoReflect() protoreflect.Message {
+	mi := &file_reqres_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PropertyField.ProtoReflect.Descriptor instead.
+func (*PropertyField) Descriptor() ([]byte, []int) {
+	return file_reqres_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *PropertyField) GetPropertyFieldId() string {
+	if x != nil {
+		return x.PropertyFieldId
+	}
+	return ""
+}
+
+func (x *PropertyField) GetDocumentClassId() string {
+	if x != nil {
+		return x.DocumentClassId
+	}
+	return ""
+}
+
+func (x *PropertyField) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *PropertyField) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
+func (x *PropertyField) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *PropertyField) GetValidationExpr() string {
+	if x != nil {
+		return x.ValidationExpr
+	}
+	return ""
+}
+
+type CreateDocumentClassRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The id of the workspace where this document class
+	// should belong to
+	WorkspaceId string `protobuf:"bytes,1,opt,name=workspaceId,proto3" json:"workspaceId,omitempty"`
+	Name        string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Label       string `protobuf:"bytes,3,opt,name=label,proto3" json:"label,omitempty"`
+	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+	// The properties of a document class
+	//
+	// Property fields are scoped by the document class thus, it is possible that a property
+	// field of the same name may have different behavior (validation, evaluation expressions)
+	// across different document classes
+	PropertyFields []*PropertyField `protobuf:"bytes,5,rep,name=propertyFields,proto3" json:"propertyFields,omitempty"`
+}
+
+func (x *CreateDocumentClassRequest) Reset() {
+	*x = CreateDocumentClassRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_reqres_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateDocumentClassRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateDocumentClassRequest) ProtoMessage() {}
+
+func (x *CreateDocumentClassRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_reqres_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateDocumentClassRequest.ProtoReflect.Descriptor instead.
+func (*CreateDocumentClassRequest) Descriptor() ([]byte, []int) {
+	return file_reqres_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *CreateDocumentClassRequest) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *CreateDocumentClassRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *CreateDocumentClassRequest) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
+func (x *CreateDocumentClassRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *CreateDocumentClassRequest) GetPropertyFields() []*PropertyField {
+	if x != nil {
+		return x.PropertyFields
+	}
+	return nil
+}
+
+type CreateDocumentClassResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	WorkspaceId    string           `protobuf:"bytes,1,opt,name=workspaceId,proto3" json:"workspaceId,omitempty"`
+	ObjectId       string           `protobuf:"bytes,2,opt,name=objectId,proto3" json:"objectId,omitempty"`
+	Name           string           `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Label          string           `protobuf:"bytes,4,opt,name=label,proto3" json:"label,omitempty"`
+	Description    string           `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	PropertyFields []*PropertyField `protobuf:"bytes,6,rep,name=propertyFields,proto3" json:"propertyFields,omitempty"`
+}
+
+func (x *CreateDocumentClassResponse) Reset() {
+	*x = CreateDocumentClassResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_reqres_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateDocumentClassResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateDocumentClassResponse) ProtoMessage() {}
+
+func (x *CreateDocumentClassResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_reqres_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateDocumentClassResponse.ProtoReflect.Descriptor instead.
+func (*CreateDocumentClassResponse) Descriptor() ([]byte, []int) {
+	return file_reqres_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *CreateDocumentClassResponse) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *CreateDocumentClassResponse) GetObjectId() string {
+	if x != nil {
+		return x.ObjectId
+	}
+	return ""
+}
+
+func (x *CreateDocumentClassResponse) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *CreateDocumentClassResponse) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
+func (x *CreateDocumentClassResponse) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *CreateDocumentClassResponse) GetPropertyFields() []*PropertyField {
+	if x != nil {
+		return x.PropertyFields
+	}
+	return nil
+}
+
 var File_reqres_proto protoreflect.FileDescriptor
 
 var file_reqres_proto_rawDesc = []byte{
@@ -310,8 +571,48 @@ var file_reqres_proto_rawDesc = []byte{
 	0x6a, 0x65, 0x63, 0x74, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x70, 0x61,
 	0x72, 0x65, 0x6e, 0x74, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x49, 0x64, 0x12, 0x12, 0x0a, 0x04,
 	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65,
-	0x42, 0x0a, 0x5a, 0x08, 0x2e, 0x2f, 0x65, 0x63, 0x6d, 0x2f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x22, 0xd7, 0x01, 0x0a, 0x0d, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x46, 0x69, 0x65,
+	0x6c, 0x64, 0x12, 0x28, 0x0a, 0x0f, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x46, 0x69,
+	0x65, 0x6c, 0x64, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0f, 0x70, 0x72, 0x6f,
+	0x70, 0x65, 0x72, 0x74, 0x79, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x49, 0x64, 0x12, 0x28, 0x0a, 0x0f,
+	0x64, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x6c, 0x61, 0x73, 0x73, 0x49, 0x64, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0f, 0x64, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x43,
+	0x6c, 0x61, 0x73, 0x73, 0x49, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x6c, 0x61,
+	0x62, 0x65, 0x6c, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6c, 0x61, 0x62, 0x65, 0x6c,
+	0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18,
+	0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69,
+	0x6f, 0x6e, 0x12, 0x26, 0x0a, 0x0e, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x45, 0x78, 0x70, 0x72, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x76, 0x61, 0x6c, 0x69,
+	0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45, 0x78, 0x70, 0x72, 0x22, 0xc6, 0x01, 0x0a, 0x1a, 0x43,
+	0x72, 0x65, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x6c, 0x61,
+	0x73, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0b, 0x77, 0x6f, 0x72,
+	0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b,
+	0x77, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x49, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e,
+	0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12,
+	0x14, 0x0a, 0x05, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05,
+	0x6c, 0x61, 0x62, 0x65, 0x6c, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70,
+	0x74, 0x69, 0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63,
+	0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x3a, 0x0a, 0x0e, 0x70, 0x72, 0x6f, 0x70, 0x65,
+	0x72, 0x74, 0x79, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x12, 0x2e, 0x65, 0x63, 0x6d, 0x2e, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x46, 0x69,
+	0x65, 0x6c, 0x64, 0x52, 0x0e, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x46, 0x69, 0x65,
+	0x6c, 0x64, 0x73, 0x22, 0xe3, 0x01, 0x0a, 0x1b, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x44, 0x6f,
+	0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x6c, 0x61, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x77, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65,
+	0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x77, 0x6f, 0x72, 0x6b, 0x73, 0x70,
+	0x61, 0x63, 0x65, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x49,
+	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x49,
+	0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x12, 0x20, 0x0a, 0x0b, 0x64,
+	0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x3a, 0x0a,
+	0x0e, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x73, 0x18,
+	0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x65, 0x63, 0x6d, 0x2e, 0x50, 0x72, 0x6f, 0x70,
+	0x65, 0x72, 0x74, 0x79, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x52, 0x0e, 0x70, 0x72, 0x6f, 0x70, 0x65,
+	0x72, 0x74, 0x79, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x73, 0x42, 0x0a, 0x5a, 0x08, 0x2e, 0x2f, 0x65,
+	0x63, 0x6d, 0x2f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -326,20 +627,25 @@ func file_reqres_proto_rawDescGZIP() []byte {
 	return file_reqres_proto_rawDescData
 }
 
-var file_reqres_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_reqres_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_reqres_proto_goTypes = []interface{}{
-	(*GetWorkspaceRequest)(nil),     // 0: ecm.GetWorkspaceRequest
-	(*GetWorkspaceResponse)(nil),    // 1: ecm.GetWorkspaceResponse
-	(*CreateWorkspaceRequest)(nil),  // 2: ecm.CreateWorkspaceRequest
-	(*CreateWorkspaceResponse)(nil), // 3: ecm.CreateWorkspaceResponse
-	(*CreateFolderRequest)(nil),     // 4: ecm.CreateFolderRequest
+	(*GetWorkspaceRequest)(nil),         // 0: ecm.GetWorkspaceRequest
+	(*GetWorkspaceResponse)(nil),        // 1: ecm.GetWorkspaceResponse
+	(*CreateWorkspaceRequest)(nil),      // 2: ecm.CreateWorkspaceRequest
+	(*CreateWorkspaceResponse)(nil),     // 3: ecm.CreateWorkspaceResponse
+	(*CreateFolderRequest)(nil),         // 4: ecm.CreateFolderRequest
+	(*PropertyField)(nil),               // 5: ecm.PropertyField
+	(*CreateDocumentClassRequest)(nil),  // 6: ecm.CreateDocumentClassRequest
+	(*CreateDocumentClassResponse)(nil), // 7: ecm.CreateDocumentClassResponse
 }
 var file_reqres_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	5, // 0: ecm.CreateDocumentClassRequest.propertyFields:type_name -> ecm.PropertyField
+	5, // 1: ecm.CreateDocumentClassResponse.propertyFields:type_name -> ecm.PropertyField
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_reqres_proto_init() }
@@ -408,6 +714,42 @@ func file_reqres_proto_init() {
 				return nil
 			}
 		}
+		file_reqres_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*PropertyField); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_reqres_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateDocumentClassRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_reqres_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateDocumentClassResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -415,7 +757,7 @@ func file_reqres_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_reqres_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
