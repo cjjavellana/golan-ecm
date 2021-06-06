@@ -4,6 +4,7 @@ import (
 	"cjavellana.me/ecm/golan/internal/cfg"
 	"cjavellana.me/ecm/golan/internal/ecm/ce"
 	"context"
+	"errors"
 	"github.com/go-playground/validator"
 	"github.com/google/uuid"
 	"github.com/mitchellh/mapstructure"
@@ -78,7 +79,7 @@ func (o *ObjectStore) NewWorkspace(name string, description string) ce.Workspace
 		objectStore: o,
 		Name:        name,
 		Description: description,
-		Type: ce.ObjectTypeWorkspace,
+		Type:        ce.ObjectTypeWorkspace,
 	}
 }
 
@@ -112,7 +113,44 @@ func (o *ObjectStore) SaveWorkspace(workspace ce.Workspace) (ce.Workspace, error
 
 func (o *ObjectStore) SaveDocumentClass(documentClass ce.DocumentClass) (ce.DocumentClass, error) {
 
-	panic("implement me")
+	workspaceId, err := primitive.ObjectIDFromHex(documentClass.GetWorkspaceId())
+	if err != nil {
+		return documentClass, err
+	}
+
+	// ensure workspace exists
+	findWorkspaceRes := o.docCollection.FindOne(context.TODO(), bson.M{
+		"_id": workspaceId,
+	})
+
+	if findWorkspaceRes.Err() != nil {
+		return documentClass, errors.New("workspace " + documentClass.GetWorkspaceId() + " does not exist")
+	}
+
+	// ensure no doc class of the same name exists
+	docClassExistRes := o.docClassCollection.FindOne(context.TODO(), bson.M{
+		"workspaceId": workspaceId,
+		"name":        documentClass.GetName(),
+	})
+
+	if docClassExistRes.Err() == nil {
+		return documentClass, errors.New("document class " + documentClass.GetName() + " already exist")
+	}
+
+	dc, ok := bson.Marshal(documentClass)
+	if ok != nil {
+		return documentClass, ok
+	}
+
+	res, err := o.docClassCollection.InsertOne(context.TODO(), dc)
+	if err != nil {
+		return documentClass, err
+	}
+
+	// set newly inserted id into the document class
+	documentClass.(*DocumentClass).ID = res.InsertedID.(primitive.ObjectID)
+
+	return documentClass, nil
 }
 
 func (o *ObjectStore) GetWorkspaceByObjectId(objectId string) (ce.Workspace, error) {

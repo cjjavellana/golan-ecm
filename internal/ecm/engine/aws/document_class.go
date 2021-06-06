@@ -6,13 +6,13 @@ import (
 )
 
 type DocumentClass struct {
-	WorkspaceId primitive.ObjectID
+	WorkspaceId primitive.ObjectID `bson:"WorkspaceId,omitempty"`
 
-	Name        string
-	Label       string
-	Description string
+	Name        string `bson:"Name,omitempty"`
+	Label       string `bson:"Label,omitempty"`
+	Description string `bson:"Description,omitempty"`
 
-	Object
+	Object `bson:",inline"`
 }
 
 func (d *DocumentClass) GetWorkspaceId() string {
