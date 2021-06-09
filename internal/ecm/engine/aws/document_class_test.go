@@ -12,7 +12,7 @@ func TestDocumentClass_SetPropertyFields(t *testing.T) {
 		Name           string
 		Label          string
 		Description    string
-		PropertyFields []interface{}
+		PropertyFields []*PropertyField
 		Object         Object
 	}
 	type args struct {
@@ -24,7 +24,7 @@ func TestDocumentClass_SetPropertyFields(t *testing.T) {
 		Name: "IssueDate",
 	}
 
-	expected := make([]interface{}, 1)
+	expected := make([]*PropertyField, 1)
 	expected[0] = &PropertyField{
 		Name: "IssueDate",
 	}

@@ -7,18 +7,18 @@ import (
 type PropertyField struct {
 	// Name represents an internal name for the property.
 	// e.g. IssueDate, MaturityDate, IssueAmount
-	Name string
+	Name string `bson:"Name,omitempty"`
 
 	// Label represents a human-friendly name used for for display purposes
 	// e.g. Issue Date, Maturity Date, Issue Amount
-	Label string
+	Label string `bson:"Label,omitempty"`
 
 	// FieldType identifies the data type that the field supports
 	// e.g. string, number, date
-	FieldType ce.FieldType
+	FieldType ce.FieldType `bson:"FieldType,omitempty"`
 
 	// Description Describes the field
-	Description string
+	Description string `bson:"Description,omitempty"`
 
 	Object `bson:",inline"`
 }
