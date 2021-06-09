@@ -49,8 +49,17 @@ message PropertyField {
   string label = 4;
   string description = 5;
 
+  enum FieldType {
+    STRING = 0;
+    INTEGER = 1;
+    DOUBLE = 2;
+    DATE = 3;
+  }
+
+  FieldType fieldType = 6;
+
   // a regex validation expression
-  string validationExpr = 6;
+  string validationExpr = 7;
 }
 
 message CreateDocumentClassRequest {

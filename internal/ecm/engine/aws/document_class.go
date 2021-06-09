@@ -12,6 +12,8 @@ type DocumentClass struct {
 	Label       string `bson:"Label,omitempty"`
 	Description string `bson:"Description,omitempty"`
 
+	PropertyFields []interface{} `bson:"PropertyFields,omitempty"`
+
 	Object `bson:",inline"`
 }
 
@@ -41,10 +43,20 @@ func (d *DocumentClass) GetDescription() string {
 	return d.Description
 }
 
-func (d *DocumentClass) SetPropertyFields(attrs []ce.PropertyField) {
-	panic("implement me")
+func (d *DocumentClass) SetPropertyFields(propertyFields []ce.PropertyField) {
+	s := make([]interface{}, len(propertyFields))
+	for i, v := range propertyFields {
+		s[i] = v
+	}
+
+	d.PropertyFields = s
 }
 
 func (d *DocumentClass) GetPropertyFields() []ce.PropertyField {
-	panic("implement me")
+	s := make([]ce.PropertyField, len(d.PropertyFields))
+	for i, v := range d.PropertyFields {
+		s[i] = v.(*PropertyField)
+	}
+
+	return s
 }

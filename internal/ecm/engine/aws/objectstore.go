@@ -71,6 +71,20 @@ func (o *ObjectStore) GetObjectStoreId() uuid.UUID {
 	return uuid.New()
 }
 
+func (o *ObjectStore) NewPropertyField(
+	name string,
+	label string,
+	fieldType ce.FieldType,
+	description string,
+) ce.PropertyField {
+	return &PropertyField{
+		Name:        name,
+		Label:       label,
+		FieldType:   fieldType,
+		Description: description,
+	}
+}
+
 func (o *ObjectStore) NewWorkspace(name string, description string) ce.Workspace {
 
 	// TODO: Check if name already exists
@@ -129,8 +143,8 @@ func (o *ObjectStore) SaveDocumentClass(documentClass ce.DocumentClass) (ce.Docu
 
 	// ensure no doc class of the same name exists
 	docClassExistRes := o.docClassCollection.FindOne(context.TODO(), bson.M{
-		"workspaceId": workspaceId,
-		"name":        documentClass.GetName(),
+		"WorkspaceId": workspaceId,
+		"Name":        documentClass.GetName(),
 	})
 
 	if docClassExistRes.Err() == nil {

@@ -5,6 +5,7 @@ import (
 	"cjavellana.me/ecm/golan/internal/ecm/pb"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
+	"strings"
 	"time"
 )
 
@@ -32,7 +33,9 @@ func (s *ObjectStoreService) CreateWorkspace(_ context.Context, in *pb.CreateWor
 	}, nil
 }
 
-func (s *ObjectStoreService) GetWorkspace(_ context.Context, in *pb.GetWorkspaceRequest) (*pb.GetWorkspaceResponse, error) {
+func (s *ObjectStoreService) GetWorkspace(
+	_ context.Context,
+	in *pb.GetWorkspaceRequest) (*pb.GetWorkspaceResponse, error) {
 
 	log.Infof("received get workspace query: %s", in.Query)
 
@@ -58,6 +61,21 @@ func (s *ObjectStoreService) CreateDocumentClass(
 		// cannot converted to a valid mongodb id
 		return nil, err
 	}
+
+	var propertyFields []ce.PropertyField
+	for _, propertyField := range in.PropertyFields {
+		fieldType := ce.FieldType(strings.ToLower(propertyField.FieldType.String()))
+
+		p := s.ObjectStore.NewPropertyField(
+			propertyField.Name,
+			propertyField.Label,
+			fieldType,
+			propertyField.Description,
+		)
+		propertyFields = append(propertyFields, p)
+	}
+
+	docClass.SetPropertyFields(propertyFields)
 
 	docClass, err = s.ObjectStore.SaveDocumentClass(docClass)
 	if err != nil {

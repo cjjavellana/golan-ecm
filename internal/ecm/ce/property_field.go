@@ -1,7 +1,5 @@
 package ce
 
-import "github.com/google/uuid"
-
 type FieldType string
 
 const (
@@ -11,6 +9,7 @@ const (
 	FieldTypeDateTime           = "date"
 )
 
+// RuleType identifies how the rule shall be evaluated
 type RuleType string
 
 const (
@@ -18,7 +17,7 @@ const (
 	RuleTypeJavascriptRule          = "javascript"
 )
 
-type PropertyRule interface {
+type FieldRule interface {
 	SetRuleType(ruleType RuleType)
 	GetRuleType() RuleType
 
@@ -42,11 +41,8 @@ type PropertyField interface {
 	SetDescription(description string)
 	GetDescription() string
 
-	SetPropertyRule(propertyRule PropertyRule)
-	GetPropertyRule() PropertyRule
-
-	// GetWorkspaceObjectId returns the ObjectId of the workspace that this attribute belongs to
-	GetWorkspaceObjectId() uuid.UUID
+	SetFieldRule(propertyRule FieldRule)
+	GetFieldRule() FieldRule
 
 	Object
 }
