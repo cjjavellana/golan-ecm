@@ -4,10 +4,12 @@ package ce
 //
 // A Folder can have a DocumentClass and have custom attributes
 type Folder interface {
-	// DocumentClass defines the document category of a document.
-	DocumentClass
 	Object
+	Container
 
-	// AddDocument creates a document in this Folder
-	AddDocument(document Document) error
+	SetAttributes(attrs []Attribute)
+	GetAttributes() []Attribute
+
+	SetDocumentClass(documentClass DocumentClass)
+	GetDocumentClass() DocumentClass
 }

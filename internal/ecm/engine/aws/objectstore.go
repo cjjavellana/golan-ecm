@@ -74,34 +74,41 @@ func (o *ObjectStore) GetObjectStoreId() uuid.UUID {
 func (o *ObjectStore) NewPropertyField(
 	name string,
 	label string,
-	fieldType ce.FieldType,
 	description string,
+	fieldType ce.FieldType,
 ) ce.PropertyField {
 	return &PropertyField{
-		Name:        name,
-		Label:       label,
-		FieldType:   fieldType,
-		Description: description,
+		Object: Object{
+			Name:        name,
+			Label:       label,
+			Description: description,
+		},
+		FieldType: fieldType,
 	}
 }
 
-func (o *ObjectStore) NewWorkspace(name string, description string) ce.Workspace {
+func (o *ObjectStore) NewWorkspace(name string, label string, description string) ce.Workspace {
 
 	// TODO: Check if name already exists
 
 	return &Workspace{
 		objectStore: o,
-		Name:        name,
-		Description: description,
 		Type:        ce.ObjectTypeWorkspace,
+		Object: Object{
+			Name:        name,
+			Label:       label,
+			Description: description,
+		},
 	}
 }
 
 func (o *ObjectStore) NewDocumentClass(name string, label string, description string) ce.DocumentClass {
 	return &DocumentClass{
-		Name:        name,
-		Label:       label,
-		Description: description,
+		Object: Object{
+			Name:        name,
+			Label:       label,
+			Description: description,
+		},
 	}
 }
 

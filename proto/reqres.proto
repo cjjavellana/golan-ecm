@@ -21,7 +21,8 @@ message GetWorkspaceResponse {
 
 message CreateWorkspaceRequest {
   string workspaceName = 1;
-  string description = 2;
+  string label = 2;
+  string description = 3;
 }
 
 message CreateWorkspaceResponse {
@@ -36,9 +37,10 @@ message CreateFolderRequest {
   // of the folder referred to by parentObjectId.
   string parentObjectId = 1;
 
-  // The name of the folder. Also used as the folder label.
-  string name = 2;
-
+  // The name of the folder.
+  string workspaceName = 2;
+  string label = 3;
+  string description = 4;
 }
 
 message PropertyField {

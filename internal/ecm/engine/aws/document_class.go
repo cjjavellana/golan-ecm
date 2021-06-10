@@ -6,11 +6,8 @@ import (
 )
 
 type DocumentClass struct {
+	// WorkspaceId refers to the object id of the workspace that this DocumentClass belongs to
 	WorkspaceId primitive.ObjectID `bson:"WorkspaceId,omitempty"`
-
-	Name        string `bson:"Name,omitempty"`
-	Label       string `bson:"Label,omitempty"`
-	Description string `bson:"Description,omitempty"`
 
 	// PropertyFields
 	PropertyFields []*PropertyField `bson:"PropertyFields,omitempty"`
@@ -30,18 +27,6 @@ func (d *DocumentClass) SetWorkspaceId(objectId string) error {
 
 	d.WorkspaceId = id
 	return nil
-}
-
-func (d *DocumentClass) GetName() string {
-	return d.Name
-}
-
-func (d *DocumentClass) GetLabel() string {
-	return d.Label
-}
-
-func (d *DocumentClass) GetDescription() string {
-	return d.Description
 }
 
 func (d *DocumentClass) SetPropertyFields(propertyFields []ce.PropertyField) {

@@ -16,12 +16,12 @@ type ObjectStore interface {
 	//
 	// Clients can set additional attributes after obtaining a reference to the Workspace instance
 	// before calling SaveWorkspace
-	NewWorkspace(name string, description string) Workspace
+	NewWorkspace(name string, label string, description string) Workspace
 
 	// NewDocumentClass creates an instance of a DocumentClass without persisting it
 	NewDocumentClass(name string, label string, description string) DocumentClass
 
-	NewPropertyField(name string, label string, fieldType FieldType, description string) PropertyField
+	NewPropertyField(name string, label string, description string, fieldType FieldType) PropertyField
 
 	// SaveWorkspace persists the given Workspace
 	// returns an error when there is an error persisting the workspace

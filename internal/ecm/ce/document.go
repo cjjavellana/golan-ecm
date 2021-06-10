@@ -1,11 +1,5 @@
 package ce
 
-type Attribute interface {
-	PropertyField
-	SetValue(value interface{})
-	GetValue() interface{}
-}
-
 type Document interface {
 	EnableVersioning()
 	VersionEnabled() bool

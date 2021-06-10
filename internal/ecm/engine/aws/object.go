@@ -10,6 +10,10 @@ type Object struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
 	IsDeleted bool               `bson:"IsDeleted"`
 
+	Name        string `bson:"Name,omitempty"`
+	Label       string `bson:"Label,omitempty"`
+	Description string `bson:"Description,omitempty"`
+
 	Owner  string             `bson:"Owner,omitempty"`
 	Parent primitive.ObjectID `bson:"Parent,omitempty"`
 
@@ -21,6 +25,18 @@ type Object struct {
 
 func (o *Object) ObjectId() string {
 	return o.ID.Hex()
+}
+
+func (o *Object) GetName() string {
+	return o.Name
+}
+
+func (o *Object) GetLabel() string {
+	return o.Label
+}
+
+func (o *Object) GetDescription() string {
+	return o.Description
 }
 
 func (o *Object) GetIsDeleted() bool {

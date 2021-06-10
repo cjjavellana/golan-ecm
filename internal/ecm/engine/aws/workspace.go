@@ -4,29 +4,19 @@ import (
 	"cjavellana.me/ecm/golan/internal/ecm/ce"
 )
 
+// Workspace defines a boundary of a particular process.
+// e.g. Sales Department, Finance Department, etc
+//
+// Workspace implements both the ce.Object and ce.Container interfaces
 type Workspace struct {
 	// These fields are persisted
 	// Data fields are persisted to the underlying store
-	Name        string `bson:"Name"`
-	Description string `bson:"Description"`
-	Type        ce.ObjectType `bson:"Type"`
 
-	Object      `bson:",inline"`
+	Type   ce.ObjectType `bson:"Type"`
+	Object `bson:",inline"`
 
 	// Non-persisted, transient fields
 	objectStore *ObjectStore
-}
-
-func (w *Workspace) GetName() string {
-	return w.Name
-}
-
-func (w *Workspace) GetDescription() string {
-	return w.Description
-}
-
-func (w *Workspace) SetDescription(desc string) {
-	w.Description = desc
 }
 
 func (w *Workspace) AddFolder(folder ce.Folder) error {
