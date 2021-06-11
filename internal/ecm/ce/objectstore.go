@@ -23,6 +23,12 @@ type ObjectStore interface {
 
 	NewPropertyField(name string, label string, description string, fieldType FieldType) PropertyField
 
+	// NewDocument returns a new non-persisted instance of a Document of DocumentClass identified by
+	// the documentClassId parameter
+	//
+	// Can return an error when the DocumentClass identified by documentClassId does not exist
+	NewDocument(name string, label string, description string, documentClassId string) (Document, error)
+
 	// SaveWorkspace persists the given Workspace
 	// returns an error when there is an error persisting the workspace
 	SaveWorkspace(workspace Workspace) (Workspace, error)
@@ -34,6 +40,19 @@ type ObjectStore interface {
 	GetWorkspaceByObjectId(objectId string) (Workspace, error)
 
 	GetWorkspaceByName(name string) (Workspace, error)
+
+	// CheckOut checks a ce.Modifiable Object out
+	//
+	// Can return an error if the Object identified by objectId is already checked out
+	// or the objectId does not correspond to a ce.Modifiable object
+	CheckOut(objectId string, owner string) (interface{}, error)
+
+	// CheckIn commits a ce.Modifiable Object back to the repository making it available
+	// for modification to other parties.
+	//
+	// Can return an error if the modifiableObject does not implement the ce.Modifiable interface or
+	// the owner in the second parameter does not correspond to the owner who checked out the document
+	CheckIn(modifiableObject interface{}, owner string) error
 
 	FindFolder() []Folder
 

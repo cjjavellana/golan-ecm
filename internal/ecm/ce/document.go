@@ -1,11 +1,13 @@
 package ce
 
+type DocStatusType string
+
 type Document interface {
 	EnableVersioning()
 	VersionEnabled() bool
 
-	SetAttribute(attrs []Attribute)
-	GetAttribute() []Attribute
+	SetAttributes(attrs []Attribute)
+	GetAttributes() []Attribute
 
 	SetFilename(filename string)
 	GetFilename() string
@@ -30,5 +32,6 @@ type Document interface {
 
 	Object
 	DocumentClass
+	Modifiable
 	Version
 }

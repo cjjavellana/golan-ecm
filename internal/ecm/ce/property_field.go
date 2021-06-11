@@ -29,8 +29,10 @@ type FieldRule interface {
 }
 
 // PropertyField represents an attribute that is defined by the end-user at run time
+//
+// PropertyField is a per-document class construct. This means that a `property` e.g. IssueDate can appear
+// in more than one DocumentClass yet can have very different validation rules
 type PropertyField interface {
-
 	SetFieldType(fieldType FieldType)
 	GetFieldType() FieldType
 

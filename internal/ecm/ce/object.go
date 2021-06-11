@@ -14,9 +14,9 @@ const (
 
 // ObjectDescriptor describes an ecm Object.
 //
-// All Object(s) in ecm is described minimally by 3 properties, namely:
+// All Object(s) in ecm is described at least by 3 properties, namely:
 // Name - An alphanumeric field used to internally described an Object. e.g. IssueDate, MaturityDate, IssueAmount
-// Label - A human-readable property used for display purposes e.g. Issue Date, Maturity Date
+// Label - A human-friendly text used for display purposes e.g. Issue Date, Maturity Date
 // Description - A long text that can be used to describe an Object in detail.
 type ObjectDescriptor struct {
 	Name        string

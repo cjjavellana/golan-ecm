@@ -36,7 +36,7 @@ func TestDocumentClass_SetPropertyFields(t *testing.T) {
 		args   args
 	}{
 		{
-			name: "itStoresArrayOfPropertyFields",
+			name: "itStoresAnArrayOfPropertyFields",
 			args: args{
 				propFields,
 			},

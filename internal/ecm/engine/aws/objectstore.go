@@ -5,6 +5,7 @@ import (
 	"cjavellana.me/ecm/golan/internal/ecm/ce"
 	"context"
 	"errors"
+	"fmt"
 	"github.com/go-playground/validator"
 	"github.com/google/uuid"
 	"github.com/mitchellh/mapstructure"
@@ -59,15 +60,8 @@ type ObjectStore struct {
 	docClassCollection *mongo.Collection
 }
 
-func (o *ObjectStore) FindFolder() []ce.Folder {
-	panic("implement me")
-}
-
-func (o *ObjectStore) FindDocuments() []ce.Document {
-	panic("implement me")
-}
-
 func (o *ObjectStore) GetObjectStoreId() uuid.UUID {
+	// TODO: Implement support for multi-object store aka multi-tenant
 	return uuid.New()
 }
 
@@ -87,7 +81,11 @@ func (o *ObjectStore) NewPropertyField(
 	}
 }
 
-func (o *ObjectStore) NewWorkspace(name string, label string, description string) ce.Workspace {
+func (o *ObjectStore) NewWorkspace(
+	name string,
+	label string,
+	description string,
+) ce.Workspace {
 
 	// TODO: Check if name already exists
 
@@ -102,7 +100,11 @@ func (o *ObjectStore) NewWorkspace(name string, label string, description string
 	}
 }
 
-func (o *ObjectStore) NewDocumentClass(name string, label string, description string) ce.DocumentClass {
+func (o *ObjectStore) NewDocumentClass(
+	name string,
+	label string,
+	description string,
+) ce.DocumentClass {
 	return &DocumentClass{
 		Object: Object{
 			Name:        name,
@@ -110,6 +112,43 @@ func (o *ObjectStore) NewDocumentClass(name string, label string, description st
 			Description: description,
 		},
 	}
+}
+
+func (o *ObjectStore) NewDocument(
+	name string,
+	label string,
+	description string,
+	documentClassId string,
+) (ce.Document, error) {
+	docClassId, err := primitive.ObjectIDFromHex(documentClassId)
+	if err != nil {
+		return nil, err
+	}
+
+	// ensure document class exists
+	findDocClassRes := o.docClassCollection.FindOne(context.TODO(), bson.M{
+		"_id": docClassId,
+	})
+	if findDocClassRes.Err() != nil {
+		return nil, errors.New(fmt.Sprintf("Document class %s does not exist", documentClassId))
+	}
+
+	var dc DocumentClass
+	err = findDocClassRes.Decode(&dc)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Document{
+		objectStore:   o,
+		Type:          ce.ObjectTypeDocument,
+		DocumentClass: dc,
+		Object: Object{
+			Name:        name,
+			Label:       label,
+			Description: description,
+		},
+	}, nil
 }
 
 func (o *ObjectStore) SaveWorkspace(workspace ce.Workspace) (ce.Workspace, error) {
@@ -143,7 +182,6 @@ func (o *ObjectStore) SaveDocumentClass(documentClass ce.DocumentClass) (ce.Docu
 	findWorkspaceRes := o.docCollection.FindOne(context.TODO(), bson.M{
 		"_id": workspaceId,
 	})
-
 	if findWorkspaceRes.Err() != nil {
 		return documentClass, errors.New("workspace " + documentClass.GetWorkspaceId() + " does not exist")
 	}
@@ -153,7 +191,6 @@ func (o *ObjectStore) SaveDocumentClass(documentClass ce.DocumentClass) (ce.Docu
 		"WorkspaceId": workspaceId,
 		"Name":        documentClass.GetName(),
 	})
-
 	if docClassExistRes.Err() == nil {
 		return documentClass, errors.New("document class " + documentClass.GetName() + " already exist")
 	}
@@ -200,6 +237,22 @@ func (o *ObjectStore) GetWorkspaceByObjectId(objectId string) (ce.Workspace, err
 }
 
 func (o *ObjectStore) GetWorkspaceByName(name string) (ce.Workspace, error) {
+	panic("implement me")
+}
+
+func (o *ObjectStore) CheckOut(objectId string, owner string) (interface{}, error) {
+	panic("implement me")
+}
+
+func (o *ObjectStore) CheckIn(modifiableObject interface{}, owner string) error {
+	panic("implement me")
+}
+
+func (o *ObjectStore) FindFolder() []ce.Folder {
+	panic("implement me")
+}
+
+func (o *ObjectStore) FindDocuments() []ce.Document {
 	panic("implement me")
 }
 

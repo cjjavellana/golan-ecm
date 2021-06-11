@@ -43,6 +43,13 @@ message CreateFolderRequest {
   string description = 4;
 }
 
+enum FieldType {
+  STRING = 0;
+  INTEGER = 1;
+  DOUBLE = 2;
+  DATE = 3;
+}
+
 message PropertyField {
   string propertyFieldId = 1;
   string documentClassId = 2;
@@ -50,13 +57,6 @@ message PropertyField {
   string name = 3;
   string label = 4;
   string description = 5;
-
-  enum FieldType {
-    STRING = 0;
-    INTEGER = 1;
-    DOUBLE = 2;
-    DATE = 3;
-  }
 
   FieldType fieldType = 6;
 
@@ -87,4 +87,24 @@ message CreateDocumentClassResponse {
   string label = 4;
   string description = 5;
   repeated PropertyField propertyFields = 6;
+}
+
+message Attribute {
+  string key = 1;
+  string value = 2;
+  FieldType fieldType = 3;
+}
+
+message CreateDocumentRequest {
+  // Defines the parent of new Document to be created
+  string parentId = 1;
+  string documentClassId = 2;
+  string name = 3;
+  string label = 4;
+  string description = 5;
+  bool isVersioningEnabled = 6;
+  string filename = 7;
+  string contentType = 8;
+  repeated Attribute attributes = 9;
+  bytes underlyingDocument = 10;
 }
