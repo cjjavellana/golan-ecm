@@ -9,25 +9,21 @@ import (
 func TestDocumentClass_SetPropertyFields(t *testing.T) {
 	type fields struct {
 		WorkspaceId    primitive.ObjectID
-		PropertyFields []*PropertyField
+		PropertyFields []*ce.PropertyField
 		Object         Object
 	}
 	type args struct {
-		propertyFields []ce.PropertyField
+		propertyFields []*ce.PropertyField
 	}
 
-	propFields := make([]ce.PropertyField, 1)
-	propFields[0] = &PropertyField{
-		Object: Object{
-			Name: "IssueDate",
-		},
+	propFields := make([]*ce.PropertyField, 1)
+	propFields[0] = &ce.PropertyField{
+		Name: "IssueDate",
 	}
 
-	expected := make([]*PropertyField, 1)
-	expected[0] = &PropertyField{
-		Object: Object{
-			Name: "IssueDate",
-		},
+	expected := make([]*ce.PropertyField, 1)
+	expected[0] = &ce.PropertyField{
+		Name: "IssueDate",
 	}
 
 	tests := []struct {
@@ -54,7 +50,7 @@ func TestDocumentClass_SetPropertyFields(t *testing.T) {
 			}
 
 			props := d.GetPropertyFields()
-			if props[0].GetName() != "IssueDate" {
+			if props[0].Name != "IssueDate" {
 				t.Errorf("Incorrect Property Field() = %v, want %v", props, tt.fields)
 			}
 		})

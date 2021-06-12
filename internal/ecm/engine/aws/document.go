@@ -3,8 +3,14 @@ package aws
 import "cjavellana.me/ecm/golan/internal/ecm/ce"
 
 type Document struct {
-	IsVersioningEnabled bool
-	Type ce.ObjectType `bson:"Type"`
+	IsVersioningEnabled   bool            `bson:"IsVersioningEnabled"`
+	Type                  ce.ObjectType   `bson:"Type"`
+	ContentType           string          `bson:"ContentType"`
+	Attributes            []*ce.Attribute `bson:"Attribute"`
+	HasUnderlyingDocument bool            `bson:"HasUnderlyingDocument"`
+	SizeInBytes           uint64          `bson:"SizeInBytes"`
+	Content               []byte          `bson:"Content"`
+	Filename              string          `bson:"Filename"`
 
 	Version
 	ce.Modifiable
@@ -12,9 +18,6 @@ type Document struct {
 	// DocumentClass describes the category that this Folder belongs to
 	DocumentClass `bson:"DocumentClass"`
 	Object        `bson:",inline"`
-
-	// Non-persisted, transient fields
-	objectStore *ObjectStore
 }
 
 func (d *Document) EnableVersioning() {
@@ -25,42 +28,43 @@ func (d *Document) VersionEnabled() bool {
 	return d.IsVersioningEnabled
 }
 
-func (d *Document) SetAttributes(attrs []ce.Attribute) {
-	panic("implement me")
+func (d *Document) SetAttributes(attrs []*ce.Attribute) {
+	d.Attributes = attrs
 }
 
-func (d *Document) GetAttributes() []ce.Attribute {
-	panic("implement me")
+func (d *Document) GetAttributes() []*ce.Attribute {
+	return d.Attributes
 }
 
 func (d *Document) SetFilename(filename string) {
-	panic("implement me")
+	d.Filename = filename
 }
 
 func (d *Document) GetFilename() string {
-	panic("implement me")
+	return d.Filename
 }
 
 func (d *Document) GetSize() uint64 {
-	panic("implement me")
+	return d.SizeInBytes
 }
 
 func (d *Document) SetContentType(contentType string) {
-	panic("implement me")
+	d.ContentType = contentType
 }
 
 func (d *Document) GetContentType() string {
-	panic("implement me")
+	return d.ContentType
 }
 
-func (d *Document) HasUnderlyingDocument() bool {
-	panic("implement me")
+func (d *Document) GetHasUnderlyingDocument() bool {
+	return d.HasUnderlyingDocument
 }
 
 func (d *Document) SetUnderlyingDocument(document []byte) {
-	panic("implement me")
+	d.Content = document
+	d.HasUnderlyingDocument = len(document) > 0
 }
 
 func (d *Document) GetUnderlyingDocument() []byte {
-	panic("implement me")
+	return d.Content
 }

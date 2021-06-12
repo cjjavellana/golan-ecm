@@ -51,17 +51,14 @@ enum FieldType {
 }
 
 message PropertyField {
-  string propertyFieldId = 1;
-  string documentClassId = 2;
+  string name = 1;
+  string label = 2;
+  string description = 3;
 
-  string name = 3;
-  string label = 4;
-  string description = 5;
-
-  FieldType fieldType = 6;
+  FieldType fieldType = 4;
 
   // a regex validation expression
-  string validationExpr = 7;
+  string validationExpr = 5;
 }
 
 message CreateDocumentClassRequest {

@@ -8,54 +8,29 @@ import (
 type Folder struct {
 	Type ce.ObjectType `bson:"Type"`
 
-	// WorkspaceId refers to the object id of the workspace that this DocumentClass belongs to
-	WorkspaceId primitive.ObjectID `bson:"WorkspaceId,omitempty"`
-
 	// ParentId refers to the entity that this Folder belongs to.
 	// A folder's parent can be a workspace (for top-level folders) or another folder.
 	ParentId primitive.ObjectID `bson:"ParentId,omitempty"`
 
+	Attributes []ce.Attribute `bson:"Attributes,omitempty"`
+
 	// DocumentClass describes the category that this Folder belongs to
-	DocumentClass `bson:"DocumentClass"`
+	DocumentClass *DocumentClass `bson:"DocumentClass"`
 	Object        `bson:",inline"`
-
-	// Non-persisted, transient fields
-	objectStore *ObjectStore
 }
 
-func (f *Folder) GetWorkspaceId() string {
-	panic("implement me")
+func (f Folder) SetAttributes(attrs []ce.Attribute) {
+	f.Attributes = attrs
 }
 
-func (f *Folder) SetWorkspaceId(objectId string) error {
-	panic("implement me")
+func (f Folder) GetAttributes() []ce.Attribute {
+	return f.Attributes
 }
 
-func (f *Folder) AddFolder(folder ce.Folder) error {
-	panic("implement me")
+func (f Folder) SetDocumentClass(documentClass ce.DocumentClass) {
+	f.DocumentClass = documentClass.(*DocumentClass)
 }
 
-func (f *Folder) AddFolders(folders ...ce.Folder) error {
-	panic("implement me")
+func (f Folder) GetDocumentClass() ce.DocumentClass {
+	return f.DocumentClass
 }
-
-func (f *Folder) AddDocument(document ce.Document) error {
-	panic("implement me")
-}
-
-func (f *Folder) AddDocuments(documents ...ce.Document) error {
-	panic("implement me")
-}
-
-func (f *Folder) GetFolders() []ce.Folder {
-	panic("implement me")
-}
-
-func (f *Folder) GetDocuments() []ce.Document {
-	panic("implement me")
-}
-
-func (f *Folder) GetChildren() []ce.Object {
-	panic("implement me")
-}
-

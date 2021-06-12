@@ -22,7 +22,11 @@ func (s *ObjectStoreService) CreateWorkspace(_ context.Context, in *pb.CreateWor
 
 	now := time.Now()
 
-	w := s.ObjectStore.NewWorkspace(in.WorkspaceName, in.Label, in.Description)
+	w := s.ObjectStore.NewWorkspace(ce.ObjectDescriptor{
+		Name:        in.WorkspaceName,
+		Label:       in.Label,
+		Description: in.Description,
+	})
 	w.SetCreatedBy("UserFromAuthToken")
 	w.SetDateCreated(&now)
 
@@ -53,7 +57,11 @@ func (s *ObjectStoreService) CreateDocumentClass(
 	_ context.Context,
 	in *pb.CreateDocumentClassRequest) (*pb.CreateDocumentClassResponse, error) {
 
-	docClass := s.ObjectStore.NewDocumentClass(in.Name, in.Label, in.Description)
+	docClass := s.ObjectStore.NewDocumentClass(ce.ObjectDescriptor{
+		Name:        in.Name,
+		Label:       in.Label,
+		Description: in.Description,
+	})
 
 	err := docClass.SetWorkspaceId(in.WorkspaceId)
 	if err != nil {
@@ -67,9 +75,11 @@ func (s *ObjectStoreService) CreateDocumentClass(
 		fieldType := ce.FieldType(strings.ToLower(propertyField.FieldType.String()))
 
 		p := s.ObjectStore.NewPropertyField(
-			propertyField.Name,
-			propertyField.Label,
-			propertyField.Description,
+			ce.ObjectDescriptor{
+				Name:        propertyField.Name,
+				Label:       propertyField.Label,
+				Description: propertyField.Description,
+			},
 			fieldType,
 		)
 		propertyFields = append(propertyFields, p)

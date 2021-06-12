@@ -16,18 +16,18 @@ type ObjectStore interface {
 	//
 	// Clients can set additional attributes after obtaining a reference to the Workspace instance
 	// before calling SaveWorkspace
-	NewWorkspace(name string, label string, description string) Workspace
+	NewWorkspace(descriptor ObjectDescriptor) Workspace
 
 	// NewDocumentClass creates an instance of a DocumentClass without persisting it
-	NewDocumentClass(name string, label string, description string) DocumentClass
+	NewDocumentClass(descriptor ObjectDescriptor) DocumentClass
 
-	NewPropertyField(name string, label string, description string, fieldType FieldType) PropertyField
+	NewPropertyField(descriptor ObjectDescriptor, fieldType FieldType) PropertyField
 
 	// NewDocument returns a new non-persisted instance of a Document of DocumentClass identified by
 	// the documentClassId parameter
 	//
 	// Can return an error when the DocumentClass identified by documentClassId does not exist
-	NewDocument(name string, label string, description string, documentClassId string) (Document, error)
+	NewDocument(descriptor ObjectDescriptor, documentClassId string) (Document, error)
 
 	// SaveWorkspace persists the given Workspace
 	// returns an error when there is an error persisting the workspace
@@ -54,9 +54,24 @@ type ObjectStore interface {
 	// the owner in the second parameter does not correspond to the owner who checked out the document
 	CheckIn(modifiableObject interface{}, owner string) error
 
-	FindFolder() []Folder
+	// CreateFolder persists an Object of type Folder to the underlying store.
+	//
+	// An error can be thrown when parentId does not correspond to a Folder or a Workspace
+	CreateFolder(parentId string, folder Folder) error
 
-	// FindDocuments returns the documents matching the search criteria
-	// TODO: Search Criteria API
-	FindDocuments() []Document
+	// CreateDocument persists an Object of type Document to the underlying store.
+	//
+	// An error can be thrown when parentId does not correspond to a Folder or a Workspace
+	CreateDocument(parentId string, folder Folder) error
+
+	// GetFolders returns the Folders that are the immediate children of the current Container
+	GetFolders() []Folder
+
+	// GetDocuments returns the Document types that the the immediate children
+	// of the current Container
+	GetDocuments() []Document
+
+	// List lists of Objects that are the immediate children
+	// of the current Container. An Object may end up being a Folder or a Document
+	List() []Object
 }

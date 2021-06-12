@@ -42,3 +42,15 @@ func initDb(config *ObjectStoreConfig) *mongo.Client {
 
 	return conn
 }
+
+func createIndex(coll *mongo.Collection, key interface{}) (string, error) {
+	idxName, err := coll.Indexes().CreateOne(
+		context.TODO(),
+		mongo.IndexModel{Keys: key},
+	)
+	if err != nil {
+		return "", err
+	}
+
+	return idxName, nil
+}
