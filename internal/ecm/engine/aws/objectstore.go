@@ -5,7 +5,6 @@ import (
 	"cjavellana.me/ecm/golan/internal/ecm/ce"
 	"context"
 	"github.com/go-playground/validator"
-	"github.com/google/uuid"
 	"github.com/mitchellh/mapstructure"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
@@ -61,13 +60,7 @@ type ObjectStore struct {
 
 	docOps       *DocumentOperation
 	docClassOps  *DocumentClassOperation
-	workspaceOps *WorkspaceOperation
 	propFieldOps *PropertyFieldOperation
-}
-
-func (o *ObjectStore) GetObjectStoreId() uuid.UUID {
-	// TODO: Implement support for multi-object store aka multi-tenant
-	return uuid.New()
 }
 
 func (o *ObjectStore) NewPropertyField(
@@ -80,7 +73,27 @@ func (o *ObjectStore) NewPropertyField(
 func (o *ObjectStore) NewWorkspace(
 	descriptor ce.ObjectDescriptor,
 ) ce.Workspace {
-	return o.workspaceOps.NewWorkspace(descriptor)
+	doc, _ := o.docOps.NewGenericDocument(descriptor, ce.ObjectTypeWorkspace)
+	return &Workspace{
+		Document: doc.(*Document),
+	}
+}
+
+func (o *ObjectStore) NewGenericFolder(descriptor ce.ObjectDescriptor) ce.Folder {
+	doc, _ := o.docOps.NewGenericDocument(descriptor, ce.ObjectTypeFolder)
+	return &Folder{
+		Document: doc.(*Document),
+	}
+}
+
+func (o *ObjectStore) NewFolderWithDocumentClass(
+	descriptor ce.ObjectDescriptor,
+	documentClassId string,
+) ce.Folder {
+	doc, _ := o.docOps.NewDocument(descriptor, documentClassId, ce.ObjectTypeFolder)
+	return &Folder{
+		Document: doc.(*Document),
+	}
 }
 
 func (o *ObjectStore) NewDocumentClass(
@@ -93,11 +106,13 @@ func (o *ObjectStore) NewDocument(
 	descriptor ce.ObjectDescriptor,
 	documentClassId string,
 ) (ce.Document, error) {
-	return o.docOps.NewDocument(descriptor, documentClassId)
+	return o.docOps.NewDocument(descriptor, documentClassId, ce.ObjectTypeDocument)
 }
 
 func (o *ObjectStore) SaveWorkspace(workspace ce.Workspace) (ce.Workspace, error) {
-	return o.workspaceOps.SaveWorkspace(workspace)
+	// obtain the underlying embedded document by the Workspace by casting
+	// to an implementation of the workspace
+	return o.docOps.CreateDocument(workspace.(*Workspace).Document)
 }
 
 func (o *ObjectStore) SaveDocumentClass(documentClass ce.DocumentClass) (ce.DocumentClass, error) {
@@ -105,7 +120,7 @@ func (o *ObjectStore) SaveDocumentClass(documentClass ce.DocumentClass) (ce.Docu
 }
 
 func (o *ObjectStore) GetWorkspaceByObjectId(objectId string) (ce.Workspace, error) {
-	return o.workspaceOps.GetWorkspaceByObjectId(objectId)
+	panic("implement me")
 }
 
 func (o *ObjectStore) GetWorkspaceByName(name string) (ce.Workspace, error) {
@@ -120,12 +135,12 @@ func (o *ObjectStore) CheckIn(modifiableObject interface{}, owner string) error 
 	panic("implement me")
 }
 
-func (o *ObjectStore) CreateFolder(parentId string, folder ce.Folder) error {
-	panic("implement me")
+func (o *ObjectStore) CreateFolder(folder ce.Folder) (ce.Folder, error) {
+	return o.docOps.CreateDocument(folder.(*Folder).Document)
 }
 
-func (o *ObjectStore) CreateDocument(parentId string, folder ce.Folder) error {
-	panic("implement me")
+func (o *ObjectStore) CreateDocument(document ce.Document) (ce.Document, error) {
+	return o.docOps.CreateDocument(document)
 }
 
 func (o *ObjectStore) GetFolders() []ce.Folder {
@@ -181,9 +196,6 @@ func GetObjectStore(config *cfg.AppConfig) *ObjectStore {
 			db: collStore,
 		},
 		docOps: &DocumentOperation{
-			db: collStore,
-		},
-		workspaceOps: &WorkspaceOperation{
 			db: collStore,
 		},
 	}

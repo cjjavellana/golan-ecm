@@ -105,3 +105,30 @@ message CreateDocumentRequest {
   repeated Attribute attributes = 9;
   bytes underlyingDocument = 10;
 }
+
+message CreateDocumentResponse {
+  string objectId = 1;
+}
+
+message UpdateDocumentRequest {
+  // the id of the document to update
+  string objectId = 1;
+  // the document can be moved to another location
+  string parentId = 2;
+  // the revision which we based our updates on
+  // used to optimistically lock the document
+  string revision = 3;
+  string name = 4;
+  string label = 5;
+  string description = 6;
+  bool isVersioningEnabled = 7;
+  string filename = 8;
+  string contentType = 9;
+  // new attributes will overwrite existing attributes
+  repeated Attribute attributes = 10;
+  bytes underlyingDocument = 11;
+}
+
+message UpdateDocumentResponse {
+  string objectId = 1;
+}

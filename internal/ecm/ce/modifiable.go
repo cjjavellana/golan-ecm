@@ -1,5 +1,7 @@
 package ce
 
+import "time"
+
 type LockStatusType string
 
 const (
@@ -8,8 +10,9 @@ const (
 )
 
 type LockStatus struct {
-	Owner  string
-	Status LockStatusType
+	Owner       string
+	Status      LockStatusType
+	LockedSince *time.Time
 }
 
 // Modifiable interface indicates that an Object(s) property can be modified.
