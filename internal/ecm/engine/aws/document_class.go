@@ -10,7 +10,7 @@ type DocumentClass struct {
 	WorkspaceId primitive.ObjectID `bson:"WorkspaceId,omitempty"`
 
 	// PropertyFields
-	PropertyFields []*PropertyField `bson:"PropertyFields,omitempty"`
+	PropertyFields []*ce.PropertyField `bson:"PropertyFields,omitempty"`
 
 	Object `bson:",inline"`
 }
@@ -30,9 +30,9 @@ func (d *DocumentClass) SetWorkspaceId(objectId string) error {
 }
 
 func (d *DocumentClass) SetPropertyFields(propertyFields []ce.PropertyField) {
-	s := make([]*PropertyField, len(propertyFields))
+	s := make([]*ce.PropertyField, len(propertyFields))
 	for i, v := range propertyFields {
-		s[i] = v.(*PropertyField)
+		s[i] = &v
 	}
 
 	d.PropertyFields = s
@@ -41,7 +41,7 @@ func (d *DocumentClass) SetPropertyFields(propertyFields []ce.PropertyField) {
 func (d *DocumentClass) GetPropertyFields() []ce.PropertyField {
 	s := make([]ce.PropertyField, len(d.PropertyFields))
 	for i, v := range d.PropertyFields {
-		s[i] = v
+		s[i] = *v
 	}
 
 	return s

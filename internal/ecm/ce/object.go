@@ -12,7 +12,8 @@ const (
 	ObjectTypeDocument             = "document"
 )
 
-// ObjectDescriptor describes an ecm Object.
+// ObjectDescriptor describes an ecm Object. This is mostly used as a parameter to functions
+// when name, label, and description are used to describe an Object
 //
 // All Object(s) in ecm is described at least by 3 properties, namely:
 // Name - An alphanumeric field used to internally described an Object. e.g. IssueDate, MaturityDate, IssueAmount

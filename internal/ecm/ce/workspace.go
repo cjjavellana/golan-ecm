@@ -12,5 +12,4 @@ package ce
 //       Document	Document
 type Workspace interface {
 	Object
-	Container
 }

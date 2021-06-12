@@ -4,14 +4,11 @@ import (
 	"cjavellana.me/ecm/golan/internal/cfg"
 	"cjavellana.me/ecm/golan/internal/ecm/ce"
 	"context"
-	"errors"
-	"fmt"
 	"github.com/go-playground/validator"
 	"github.com/google/uuid"
 	"github.com/mitchellh/mapstructure"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -54,10 +51,18 @@ type ObjectStoreConfig struct {
 	ElasticSearch ElasticSearch
 }
 
+type CollectionStore struct {
+	document      *mongo.Collection
+	documentClass *mongo.Collection
+}
+
 type ObjectStore struct {
-	mongoClient        *mongo.Client
-	docCollection      *mongo.Collection
-	docClassCollection *mongo.Collection
+	db *CollectionStore
+
+	docOps       *DocumentOperation
+	docClassOps  *DocumentClassOperation
+	workspaceOps *WorkspaceOperation
+	propFieldOps *PropertyFieldOperation
 }
 
 func (o *ObjectStore) GetObjectStoreId() uuid.UUID {
@@ -66,174 +71,41 @@ func (o *ObjectStore) GetObjectStoreId() uuid.UUID {
 }
 
 func (o *ObjectStore) NewPropertyField(
-	name string,
-	label string,
-	description string,
+	descriptor ce.ObjectDescriptor,
 	fieldType ce.FieldType,
 ) ce.PropertyField {
-	return &PropertyField{
-		Object: Object{
-			Name:        name,
-			Label:       label,
-			Description: description,
-		},
-		FieldType: fieldType,
-	}
+	return o.propFieldOps.NewPropertyField(descriptor, fieldType)
 }
 
 func (o *ObjectStore) NewWorkspace(
-	name string,
-	label string,
-	description string,
+	descriptor ce.ObjectDescriptor,
 ) ce.Workspace {
-
-	// TODO: Check if name already exists
-
-	return &Workspace{
-		objectStore: o,
-		Type:        ce.ObjectTypeWorkspace,
-		Object: Object{
-			Name:        name,
-			Label:       label,
-			Description: description,
-		},
-	}
+	return o.workspaceOps.NewWorkspace(descriptor)
 }
 
 func (o *ObjectStore) NewDocumentClass(
-	name string,
-	label string,
-	description string,
+	descriptor ce.ObjectDescriptor,
 ) ce.DocumentClass {
-	return &DocumentClass{
-		Object: Object{
-			Name:        name,
-			Label:       label,
-			Description: description,
-		},
-	}
+	return o.docClassOps.NewDocumentClass(descriptor)
 }
 
 func (o *ObjectStore) NewDocument(
-	name string,
-	label string,
-	description string,
+	descriptor ce.ObjectDescriptor,
 	documentClassId string,
 ) (ce.Document, error) {
-	docClassId, err := primitive.ObjectIDFromHex(documentClassId)
-	if err != nil {
-		return nil, err
-	}
-
-	// ensure document class exists
-	findDocClassRes := o.docClassCollection.FindOne(context.TODO(), bson.M{
-		"_id": docClassId,
-	})
-	if findDocClassRes.Err() != nil {
-		return nil, errors.New(fmt.Sprintf("Document class %s does not exist", documentClassId))
-	}
-
-	var dc DocumentClass
-	err = findDocClassRes.Decode(&dc)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Document{
-		objectStore:   o,
-		Type:          ce.ObjectTypeDocument,
-		DocumentClass: dc,
-		Object: Object{
-			Name:        name,
-			Label:       label,
-			Description: description,
-		},
-	}, nil
+	return o.docOps.NewDocument(descriptor, documentClassId)
 }
 
 func (o *ObjectStore) SaveWorkspace(workspace ce.Workspace) (ce.Workspace, error) {
-	m, ok := bson.Marshal(workspace)
-	if ok != nil {
-		return workspace, ok
-	}
-
-	res, err := o.docCollection.InsertOne(context.TODO(), m)
-	if err != nil {
-		return workspace, err
-	}
-
-	// cast the interface to a struct so that we can assign the generated id
-	v := workspace.(*Workspace)
-	v.ID = res.InsertedID.(primitive.ObjectID)
-
-	log.Infof("workspace %s created: %s", workspace.GetName(), workspace.ObjectId())
-
-	return workspace, nil
+	return o.workspaceOps.SaveWorkspace(workspace)
 }
 
 func (o *ObjectStore) SaveDocumentClass(documentClass ce.DocumentClass) (ce.DocumentClass, error) {
-
-	workspaceId, err := primitive.ObjectIDFromHex(documentClass.GetWorkspaceId())
-	if err != nil {
-		return documentClass, err
-	}
-
-	// ensure workspace exists
-	findWorkspaceRes := o.docCollection.FindOne(context.TODO(), bson.M{
-		"_id": workspaceId,
-	})
-	if findWorkspaceRes.Err() != nil {
-		return documentClass, errors.New("workspace " + documentClass.GetWorkspaceId() + " does not exist")
-	}
-
-	// ensure no doc class of the same name exists
-	docClassExistRes := o.docClassCollection.FindOne(context.TODO(), bson.M{
-		"WorkspaceId": workspaceId,
-		"Name":        documentClass.GetName(),
-	})
-	if docClassExistRes.Err() == nil {
-		return documentClass, errors.New("document class " + documentClass.GetName() + " already exist")
-	}
-
-	dc, ok := bson.Marshal(documentClass)
-	if ok != nil {
-		return documentClass, ok
-	}
-
-	res, err := o.docClassCollection.InsertOne(context.TODO(), dc)
-	if err != nil {
-		return documentClass, err
-	}
-
-	// set newly inserted id into the document class
-	documentClass.(*DocumentClass).ID = res.InsertedID.(primitive.ObjectID)
-
-	return documentClass, nil
+	return o.docClassOps.SaveDocumentClass(documentClass)
 }
 
 func (o *ObjectStore) GetWorkspaceByObjectId(objectId string) (ce.Workspace, error) {
-	id, err := primitive.ObjectIDFromHex(objectId)
-	if err != nil {
-		return nil, err
-	}
-
-	res := o.docCollection.FindOne(context.TODO(), bson.M{
-		"_id": id,
-	})
-
-	if res.Err() != nil {
-		return nil, res.Err()
-	}
-
-	var w Workspace
-	err = res.Decode(&w)
-	if err != nil {
-		return nil, err
-	}
-
-	w.objectStore = o
-
-	return &w, nil
+	return o.workspaceOps.GetWorkspaceByObjectId(objectId)
 }
 
 func (o *ObjectStore) GetWorkspaceByName(name string) (ce.Workspace, error) {
@@ -248,11 +120,23 @@ func (o *ObjectStore) CheckIn(modifiableObject interface{}, owner string) error 
 	panic("implement me")
 }
 
-func (o *ObjectStore) FindFolder() []ce.Folder {
+func (o *ObjectStore) CreateFolder(parentId string, folder ce.Folder) error {
 	panic("implement me")
 }
 
-func (o *ObjectStore) FindDocuments() []ce.Document {
+func (o *ObjectStore) CreateDocument(parentId string, folder ce.Folder) error {
+	panic("implement me")
+}
+
+func (o *ObjectStore) GetFolders() []ce.Folder {
+	panic("implement me")
+}
+
+func (o *ObjectStore) GetDocuments() []ce.Document {
+	panic("implement me")
+}
+
+func (o *ObjectStore) List() []ce.Object {
 	panic("implement me")
 }
 
@@ -278,10 +162,40 @@ func GetObjectStore(config *cfg.AppConfig) *ObjectStore {
 	docCollection := getMongoCollection(database, "documents")
 	docClassCollection := getMongoCollection(database, "document_class")
 
+	createIndexOnName(
+		docCollection,
+		docClassCollection,
+	)
+
+	collStore := &CollectionStore{
+		document:      docCollection,
+		documentClass: docClassCollection,
+	}
+
 	return &ObjectStore{
-		mongoClient:        mongoClient,
-		docCollection:      docCollection,
-		docClassCollection: docClassCollection,
+		db: collStore,
+		propFieldOps: &PropertyFieldOperation{
+			db: collStore,
+		},
+		docClassOps: &DocumentClassOperation{
+			db: collStore,
+		},
+		docOps: &DocumentOperation{
+			db: collStore,
+		},
+		workspaceOps: &WorkspaceOperation{
+			db: collStore,
+		},
+	}
+}
+
+func createIndexOnName(collections ...*mongo.Collection) {
+	for _, v := range collections {
+		if idxName, err := createIndex(v, bson.M{"Name": 1}); err != nil {
+			log.Errorf("unable to create index for %s collection: %v", v.Name(), err)
+		} else {
+			log.Infof("index %s created successfully on %s", idxName, v.Name())
+		}
 	}
 }
 

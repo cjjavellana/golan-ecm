@@ -6,8 +6,8 @@ type Document interface {
 	EnableVersioning()
 	VersionEnabled() bool
 
-	SetAttributes(attrs []Attribute)
-	GetAttributes() []Attribute
+	SetAttributes(attrs []*Attribute)
+	GetAttributes() []*Attribute
 
 	SetFilename(filename string)
 	GetFilename() string
@@ -22,9 +22,9 @@ type Document interface {
 	SetContentType(contentType string)
 	GetContentType() string
 
-	// HasUnderlyingDocument returns true when this Document is backed
+	// GetHasUnderlyingDocument returns true when this Document is backed
 	// by an underlying document e.g. pdf, word, xls, xml, etc
-	HasUnderlyingDocument() bool
+	GetHasUnderlyingDocument() bool
 
 	// SetUnderlyingDocument sets the underlying document for this document
 	SetUnderlyingDocument(document []byte)
