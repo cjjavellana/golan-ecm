@@ -11,13 +11,22 @@ type Document struct {
 	SizeInBytes           uint64          `bson:"SizeInBytes"`
 	Content               []byte          `bson:"Content"`
 	Filename              string          `bson:"Filename"`
+	PreviousVersions      []Document      `bson:"PreviousVersions"`
 
-	Version
-	ce.Modifiable
+	ce.LockStatus `bson:"LockStatus"`
+
+	// Version is a human-friendly versioning scheme e.g. 1.1, 1.2, 1.3, etc
+	ce.Version `bson:"Version"`
+
+	// Revision is used as an optimistic lock
+	Revision uint32 `bson:"Revision"`
 
 	// DocumentClass describes the category that this Folder belongs to
-	DocumentClass `bson:"DocumentClass"`
-	Object        `bson:",inline"`
+	*DocumentClass `bson:"DocumentClass"`
+	Object         `bson:",inline"`
+
+	// flag that makes the Promote function idempotent in-between persists
+	promoteDirty bool
 }
 
 func (d *Document) EnableVersioning() {
@@ -67,4 +76,30 @@ func (d *Document) SetUnderlyingDocument(document []byte) {
 
 func (d *Document) GetUnderlyingDocument() []byte {
 	return d.Content
+}
+
+func (d *Document) PromoteVersion() ce.Version {
+	if !d.promoteDirty {
+		v := d.Version
+		v.MajorVersion = v.MajorVersion + 1
+		v.MinorVersion = 0
+	}
+
+	return d.Version
+}
+
+func (d *Document) GetVersion() ce.Version {
+	return d.Version
+}
+
+func (d *Document) CheckOut(owner string) {
+	panic("implement me")
+}
+
+func (d *Document) CheckIn(owner string) {
+	panic("implement me")
+}
+
+func (d *Document) GetRevision() uint32 {
+	return d.Revision
 }

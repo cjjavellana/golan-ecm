@@ -1,7 +1,5 @@
 package ce
 
-import "github.com/google/uuid"
-
 // ObjectStore is responsible for providing storage and retrieval functionalities.
 //
 // An instance of this service can only connect to a single ObjectStore. ObjectStore supports the following
@@ -10,13 +8,20 @@ import "github.com/google/uuid"
 //  2. On-premise MongoDB
 //  3. On-premise MariaDB
 type ObjectStore interface {
-	GetObjectStoreId() uuid.UUID
 
 	// NewWorkspace creates an instance (in memory) of a Workspace without persisting it.
 	//
 	// Clients can set additional attributes after obtaining a reference to the Workspace instance
 	// before calling SaveWorkspace
 	NewWorkspace(descriptor ObjectDescriptor) Workspace
+
+	// NewGenericFolder creates an in-memory instead of a Folder with no DocumentClass
+	NewGenericFolder(descriptor ObjectDescriptor) Folder
+
+	// NewFolderWithDocumentClass creates an in-memory instance of a Folder with a DocumentClass.
+	// Having a DocumentClass allows a Folder to be tagged with custom attributes as allowed by
+	// the DocumentClass
+	NewFolderWithDocumentClass(descriptor ObjectDescriptor, documentClassId string) Folder
 
 	// NewDocumentClass creates an instance of a DocumentClass without persisting it
 	NewDocumentClass(descriptor ObjectDescriptor) DocumentClass
@@ -54,15 +59,13 @@ type ObjectStore interface {
 	// the owner in the second parameter does not correspond to the owner who checked out the document
 	CheckIn(modifiableObject interface{}, owner string) error
 
-	// CreateFolder persists an Object of type Folder to the underlying store.
-	//
-	// An error can be thrown when parentId does not correspond to a Folder or a Workspace
-	CreateFolder(parentId string, folder Folder) error
+	// CreateFolder persists the Folder to the underlying store.
+	CreateFolder(folder Folder) (Folder, error)
 
 	// CreateDocument persists an Object of type Document to the underlying store.
 	//
-	// An error can be thrown when parentId does not correspond to a Folder or a Workspace
-	CreateDocument(parentId string, folder Folder) error
+	// An error can be thrown when parent does not correspond to a Folder or a Workspace
+	CreateDocument(document Document) (Document, error)
 
 	// GetFolders returns the Folders that are the immediate children of the current Container
 	GetFolders() []Folder

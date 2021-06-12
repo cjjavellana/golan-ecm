@@ -99,3 +99,49 @@ func (s *ObjectStoreService) CreateDocumentClass(
 		Description: in.Description,
 	}, nil
 }
+
+func (s *ObjectStoreService) CreateDocument(_ context.Context, in *pb.CreateDocumentRequest) (*pb.CreateDocumentResponse, error) {
+	doc, err := s.ObjectStore.NewDocument(
+		ce.ObjectDescriptor{
+			Name:        in.Name,
+			Label:       in.Label,
+			Description: in.Description,
+		},
+		in.DocumentClassId,
+	)
+	if err != nil {
+		log.Errorf("unable to create new document %v", err)
+		return nil, err
+	}
+
+	if err = doc.SetParent(in.ParentId); err != nil {
+		log.Errorf("incorrect document parent id format %s", in.ParentId)
+		return nil, err
+	}
+
+	doc.SetContentType(in.ContentType)
+	doc.SetFilename(in.Filename)
+	doc.SetUnderlyingDocument(in.UnderlyingDocument)
+	if in.IsVersioningEnabled {
+		doc.EnableVersioning()
+	}
+
+	var attrs = make([]*ce.Attribute, len(in.Attributes))
+	for i, v := range in.Attributes {
+		attrs[i] = &ce.Attribute{
+			Key:   v.Key,
+			Value: v.Value,
+			Type:  ce.FieldType(strings.ToLower(v.FieldType.String())),
+		}
+	}
+	doc.SetAttributes(attrs)
+
+	doc, err = s.ObjectStore.CreateDocument(doc)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.CreateDocumentResponse{
+		ObjectId: doc.ObjectId(),
+	}, nil
+}

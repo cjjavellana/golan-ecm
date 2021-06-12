@@ -2,6 +2,11 @@ package ce
 
 type DocStatusType string
 
+type Version struct {
+	MajorVersion uint32
+	MinorVersion uint32
+}
+
 type Document interface {
 	EnableVersioning()
 	VersionEnabled() bool
@@ -11,6 +16,16 @@ type Document interface {
 
 	SetFilename(filename string)
 	GetFilename() string
+
+	// PromoteVersion increments the Document's major version
+	// and resetting the minor version to 0
+	PromoteVersion() Version
+	GetVersion() Version
+
+	GetRevision() uint32
+
+	CheckOut(owner string)
+	CheckIn(owner string)
 
 	// GetSize Returns the size of the document in bytes.
 	// Derived when SetUnderlyingDocument is called.
@@ -32,6 +47,4 @@ type Document interface {
 
 	Object
 	DocumentClass
-	Modifiable
-	Version
 }

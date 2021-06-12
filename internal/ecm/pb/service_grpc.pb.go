@@ -22,6 +22,7 @@ type ContentEngineClient interface {
 	CreateWorkspace(ctx context.Context, in *CreateWorkspaceRequest, opts ...grpc.CallOption) (*CreateWorkspaceResponse, error)
 	GetWorkspace(ctx context.Context, in *GetWorkspaceRequest, opts ...grpc.CallOption) (*GetWorkspaceResponse, error)
 	CreateDocumentClass(ctx context.Context, in *CreateDocumentClassRequest, opts ...grpc.CallOption) (*CreateDocumentClassResponse, error)
+	CreateDocument(ctx context.Context, in *CreateDocumentRequest, opts ...grpc.CallOption) (*CreateDocumentResponse, error)
 }
 
 type contentEngineClient struct {
@@ -59,6 +60,15 @@ func (c *contentEngineClient) CreateDocumentClass(ctx context.Context, in *Creat
 	return out, nil
 }
 
+func (c *contentEngineClient) CreateDocument(ctx context.Context, in *CreateDocumentRequest, opts ...grpc.CallOption) (*CreateDocumentResponse, error) {
+	out := new(CreateDocumentResponse)
+	err := c.cc.Invoke(ctx, "/ecm.ContentEngine/CreateDocument", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ContentEngineServer is the server API for ContentEngine service.
 // All implementations must embed UnimplementedContentEngineServer
 // for forward compatibility
@@ -67,6 +77,7 @@ type ContentEngineServer interface {
 	CreateWorkspace(context.Context, *CreateWorkspaceRequest) (*CreateWorkspaceResponse, error)
 	GetWorkspace(context.Context, *GetWorkspaceRequest) (*GetWorkspaceResponse, error)
 	CreateDocumentClass(context.Context, *CreateDocumentClassRequest) (*CreateDocumentClassResponse, error)
+	CreateDocument(context.Context, *CreateDocumentRequest) (*CreateDocumentResponse, error)
 	mustEmbedUnimplementedContentEngineServer()
 }
 
@@ -82,6 +93,9 @@ func (UnimplementedContentEngineServer) GetWorkspace(context.Context, *GetWorksp
 }
 func (UnimplementedContentEngineServer) CreateDocumentClass(context.Context, *CreateDocumentClassRequest) (*CreateDocumentClassResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateDocumentClass not implemented")
+}
+func (UnimplementedContentEngineServer) CreateDocument(context.Context, *CreateDocumentRequest) (*CreateDocumentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateDocument not implemented")
 }
 func (UnimplementedContentEngineServer) mustEmbedUnimplementedContentEngineServer() {}
 
@@ -150,6 +164,24 @@ func _ContentEngine_CreateDocumentClass_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ContentEngine_CreateDocument_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateDocumentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ContentEngineServer).CreateDocument(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ecm.ContentEngine/CreateDocument",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ContentEngineServer).CreateDocument(ctx, req.(*CreateDocumentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ContentEngine_ServiceDesc is the grpc.ServiceDesc for ContentEngine service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -168,6 +200,10 @@ var ContentEngine_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateDocumentClass",
 			Handler:    _ContentEngine_CreateDocumentClass_Handler,
+		},
+		{
+			MethodName: "CreateDocument",
+			Handler:    _ContentEngine_CreateDocument_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

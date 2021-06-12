@@ -4,11 +4,5 @@ package ce
 //
 // A Folder can have a DocumentClass and have custom attributes
 type Folder interface {
-	Object
-
-	SetAttributes(attrs []Attribute)
-	GetAttributes() []Attribute
-
-	SetDocumentClass(documentClass DocumentClass)
-	GetDocumentClass() DocumentClass
+	Document
 }
