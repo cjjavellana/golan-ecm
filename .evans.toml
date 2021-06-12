@@ -1,0 +1,12 @@
+[default]
+protofile = ["service.proto", "reqres.proto"]
+protopath = ["proto"]
+package = "ecm"
+service = "ContentEngine"
+
+[server]
+host = "127.0.0.1"
+name = ""
+port = "9000"
+reflection = false
+tls = false
