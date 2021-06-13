@@ -51,8 +51,8 @@ func (d *DocumentOperation) NewDocument(
 	}, nil
 }
 
-func (d *DocumentOperation) CreateDocument(document ce.Document) (ce.Document, error) {
-	mongoDoc := document.(*Document)
+func (d *DocumentOperation) CreateDocument(doc ce.Document) (ce.Document, error) {
+	mongoDoc := doc.(*Document)
 
 	if mongoDoc.Type != ce.ObjectTypeWorkspace {
 		err := validateParent(d.db.document, mongoDoc)
@@ -74,8 +74,8 @@ func (d *DocumentOperation) CreateDocument(document ce.Document) (ce.Document, e
 	return mongoDoc, nil
 }
 
-func (d *DocumentOperation) UpdateDocument(document ce.Document) (ce.Document, error) {
-	mongoDoc := document.(*Document)
+func (d *DocumentOperation) UpdateDocument(doc ce.Document) (ce.Document, error) {
+	mongoDoc := doc.(*Document)
 
 	err := validateParent(d.db.document, mongoDoc)
 	if err != nil {
@@ -195,7 +195,7 @@ func findDocClass(
 		"_id": docClassId,
 	})
 	if findDocClassRes.Err() != nil {
-		return nil, errors.New(fmt.Sprintf("Document class %s does not exist", documentClassId))
+		return nil, errors.New(fmt.Sprintf("document class %s does not exist", documentClassId))
 	}
 
 	var dc DocumentClass
@@ -208,7 +208,7 @@ func findDocClass(
 }
 
 // validateParent ensures the following:
-// 1. That the parent object exists
+// 1. That the parent Object exists
 // 2. That the parent is of type Folder or Workspace
 func validateParent(coll *mongo.Collection, mongoDoc *Document) error {
 	parentRes := coll.FindOne(context.TODO(), bson.M{

@@ -48,6 +48,8 @@ enum FieldType {
   INTEGER = 1;
   DOUBLE = 2;
   DATE = 3;
+  // Complex property fields refer to another document category
+  COMPLEX = 4;
 }
 
 message PropertyField {
@@ -59,6 +61,17 @@ message PropertyField {
 
   // a regex validation expression
   string validationExpr = 5;
+
+  // expression to be evaluated to resolve
+  // the value for this field.
+  string calculationExpr = 6;
+
+  // indicates whether this property is repeatable i.e. array
+  bool repeatable = 7;
+
+  // refers to the id of the document category.
+  // only used when fieldType = COMPLEX
+  repeated PropertyField subProperties = 8;
 }
 
 message CreateDocumentClassRequest {

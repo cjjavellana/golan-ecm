@@ -1,0 +1,101 @@
+{
+  "workspaceId": "{{workspaceId}}",
+  "name": "Invoice",
+  "label": "Invoice",
+  "description": "Invoice Class",
+  "propertyFields": [
+    {
+      "name": "billToCompanyName",
+      "label": "Bill To",
+      "fieldType": 0,
+      "description": "Bill To"
+    },
+    {
+      "name": "billingAddrLine1",
+      "label": "Address Line 1",
+      "fieldType": 0,
+      "description": "Billing Address Line 1"
+    },
+    {
+      "name": "billingAddrLine2",
+      "label": "Address Line 2",
+      "fieldType": 0,
+      "description": "Billing Address Line 2"
+    },
+    {
+      "name": "shippingAddrLine1",
+      "label": "Address Line 1",
+      "fieldType": 0,
+      "description": "Billing Address Line 1"
+    },
+    {
+      "name": "shippingAddrLine2",
+      "label": "Address Line 2",
+      "fieldType": 0,
+      "description": "Billing Address Line 2"
+    },
+    {
+      "name": "invoiceNumber",
+      "label": "Invoice Number",
+      "fieldType": 0,
+      "description": "Invoice Number"
+    },
+    {
+      "name": "lineItems",
+      "label": "Line Items",
+      "fieldType": 4,
+      "description": "Line Items (Complex Type)",
+      "subDefinition": [
+        {
+          "name": "qty",
+          "label": "Quantity",
+          "fieldType": 2,
+          "description": "Quantity"
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "fieldType": 0,
+          "description": "Item Description"
+        },
+        {
+          "name": "sku",
+          "label": "Unit Code",
+          "fieldType": 0,
+          "description": "Unit Code"
+        },
+        {
+          "name": "price",
+          "label": "Unit Price",
+          "fieldType": 2,
+          "description": "Unit Price"
+        },
+        {
+          "name": "total",
+          "label": "Total",
+          "fieldType": 2,
+          "description": "Total",
+          "calculationExpr": "{{ qty * price }}"
+        }
+      ]
+    },
+    {
+      "name": "subTotal",
+      "label": "Sub-Total",
+      "fieldType": 2,
+      "description": "Sub-Total Before Taxes"
+    },
+    {
+      "name": "salesTax",
+      "label": "Sales Tax (5%)",
+      "fieldType": 2,
+      "description": "Sales Tax"
+    },
+    {
+      "name": "totalAmountDue",
+      "label": "Total Amount Due",
+      "fieldType": 2,
+      "description": "Total Amount Due"
+    }
+  ]
+}
