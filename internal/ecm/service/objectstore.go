@@ -72,20 +72,8 @@ func (s *ObjectStoreService) CreateDocumentClass(
 		return nil, err
 	}
 
-	var propertyFields []ce.PropertyField
-	for _, propertyField := range in.PropertyFields {
-		fieldType := ce.FieldType(strings.ToLower(propertyField.FieldType.String()))
+	propertyFields := s.PropertyFieldHierarchy.Build(in.PropertyFields)
 
-		p := s.ObjectStore.NewPropertyField(
-			ce.ObjectDescriptor{
-				Name:        propertyField.Name,
-				Label:       propertyField.Label,
-				Description: propertyField.Description,
-			},
-			fieldType,
-		)
-		propertyFields = append(propertyFields, p)
-	}
 
 	docClass.SetPropertyFields(propertyFields)
 

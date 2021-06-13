@@ -45,7 +45,7 @@
       "label": "Line Items",
       "fieldType": 4,
       "description": "Line Items (Complex Type)",
-      "subDefinition": [
+      "subProperties": [
         {
           "name": "qty",
           "label": "Quantity",

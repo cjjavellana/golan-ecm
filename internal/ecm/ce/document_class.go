@@ -21,8 +21,8 @@ type DocumentClass interface {
 	// e.g. An Insurance Policy Document
 	GetDescription() string
 
-	SetPropertyFields(propertyFields []PropertyField)
-	GetPropertyFields() []PropertyField
+	SetPropertyFields(propertyFields []*PropertyField)
+	GetPropertyFields() []*PropertyField
 
 	Object
 }
