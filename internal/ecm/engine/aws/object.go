@@ -80,7 +80,7 @@ func (o *Object) GetDateUpdated() *time.Time {
 }
 
 func (o *Object) GetObjectType() ce.ObjectType {
-	panic("this must be overridden by structures embedding this object")
+	panic("this must be overridden by structures embedding this Object")
 }
 
 func (o *Object) GetParent() string {

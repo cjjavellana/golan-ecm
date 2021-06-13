@@ -3,6 +3,7 @@ package service
 import (
 	"cjavellana.me/ecm/golan/internal/ecm/ce"
 	"cjavellana.me/ecm/golan/internal/ecm/pb"
+	"cjavellana.me/ecm/golan/internal/ecm/service/builder"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 	"strings"
@@ -11,6 +12,7 @@ import (
 
 type ObjectStoreService struct {
 	ObjectStore ce.ObjectStore
+	builder.PropertyFieldHierarchy
 
 	// Required for future compatibility see https://github.com/grpc/grpc-go/blob/master/cmd/protoc-gen-go-grpc/README.md
 	pb.UnimplementedContentEngineServer

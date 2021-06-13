@@ -13,6 +13,7 @@ Golan supports OAuth2 authentication and participate in this protocol as a resou
 
 ## Getting Started
 
+
 ### Developing for DocumentDB / MongoDB
 
 Starting MongoDB
@@ -38,7 +39,7 @@ $ go build -o ecm-exec cmd/main.go
 $ ./ecm-exec --config samples/config.yaml
 ```
 
-Start Evans Cli
+Using Evans (REPL)
 ```shell
 $ cd proto
 $ evans --host 127.0.0.1 --port 9000 repl --proto service.proto
@@ -48,3 +49,19 @@ $ evans --host 127.0.0.1 --port 9000 repl --proto service.proto
 Calling gRPC Service Using Evans
 
 ![Calling gRPC Service in Evans](docs/calling-service-in-evans.png?raw=true "Evans")
+
+Using Evans (CLI)
+
+If you intend to use `seed.sh` to test the Golan ECM's gRPC endpoints, you need to install
+[jq](https://stedolan.github.io/jq/). [jq](https://stedolan.github.io/jq/) is used to parse the output from stdout and use the parsed output as an input on 
+subsequent calls.
+
+On MacOS, you can install [jq](https://stedolan.github.io/jq/) using homebrew
+```shell
+$ brew install jq
+Updating Homebrew...
+...
+
+$ which jq
+/usr/local/bin/jq
+```

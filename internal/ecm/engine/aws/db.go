@@ -29,15 +29,15 @@ func initDb(config *ObjectStoreConfig) *mongo.Client {
 			options.Client().SetAuth(credentials).ApplyURI(config.DB.URI),
 		)
 		if err != nil {
-			log.Fatalf("unable to connect to object store database: %v", err)
+			log.Fatalf("unable to connect to Object store database: %v", err)
 		}
 
 		err = conn.Ping(context.TODO(), readpref.Primary())
 		if err != nil {
-			log.Fatalf("unable to connect to object store database: %v", err)
+			log.Fatalf("unable to connect to Object store database: %v", err)
 		}
 
-		log.Infof("succesfully connected to object store database %s", config.DB.DatabaseName)
+		log.Infof("succesfully connected to Object store database %s", config.DB.DatabaseName)
 	}
 
 	return conn

@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// This package contains the object store implementation for AWS.
+// This package contains the Object store implementation for AWS.
 //
 // Object metadata are stored in AWS' DynamoDB with search-indexing capability provided by
 // AWS Elastic Search.
@@ -109,10 +109,10 @@ func (o *ObjectStore) NewDocument(
 	return o.docOps.NewDocument(descriptor, documentClassId, ce.ObjectTypeDocument)
 }
 
-func (o *ObjectStore) SaveWorkspace(workspace ce.Workspace) (ce.Workspace, error) {
+func (o *ObjectStore) SaveWorkspace(w ce.Workspace) (ce.Workspace, error) {
 	// obtain the underlying embedded document by the Workspace by casting
-	// to an implementation of the workspace
-	return o.docOps.CreateDocument(workspace.(*Workspace).Document)
+	// to an implementation of the Workspace
+	return o.docOps.CreateDocument(w.(*Workspace).Document)
 }
 
 func (o *ObjectStore) SaveDocumentClass(documentClass ce.DocumentClass) (ce.DocumentClass, error) {
@@ -135,8 +135,8 @@ func (o *ObjectStore) CheckIn(modifiableObject interface{}, owner string) error 
 	panic("implement me")
 }
 
-func (o *ObjectStore) CreateFolder(folder ce.Folder) (ce.Folder, error) {
-	return o.docOps.CreateDocument(folder.(*Folder).Document)
+func (o *ObjectStore) CreateFolder(f ce.Folder) (ce.Folder, error) {
+	return o.docOps.CreateDocument(f.(*Folder).Document)
 }
 
 func (o *ObjectStore) CreateDocument(document ce.Document) (ce.Document, error) {
@@ -161,21 +161,21 @@ func GetObjectStore(config *cfg.AppConfig) *ObjectStore {
 
 	err := mapstructure.Decode(config.StoreConfig, &objStoreConfig)
 	if err != nil {
-		// no point in continuing when we cannot connect to our object store
+		// no point in continuing when we cannot connect to our Object store
 		log.Fatalf("unable to decode store config: %v", err)
 	}
 
 	err = validateObjectStoreConfig(&objStoreConfig)
 	if err != nil {
-		log.Fatalf("unable to initialize aws object store: %v", err)
+		log.Fatalf("unable to initialize aws Object store: %v", err)
 	}
 
-	log.Debugf("aws object store config: %v", objStoreConfig)
+	log.Debugf("aws Object store config: %v", objStoreConfig)
 
 	mongoClient := initDb(&objStoreConfig)
 	database := mongoClient.Database(objStoreConfig.DB.DatabaseName)
 	docCollection := getMongoCollection(database, "documents")
-	docClassCollection := getMongoCollection(database, "document_class")
+	docClassCollection := getMongoCollection(database, "document_classes")
 
 	createIndexOnName(
 		docCollection,

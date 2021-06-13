@@ -5,6 +5,7 @@ import (
 	"cjavellana.me/ecm/golan/internal/ecm/objectstorefactory"
 	"cjavellana.me/ecm/golan/internal/ecm/pb"
 	"cjavellana.me/ecm/golan/internal/ecm/service"
+	"cjavellana.me/ecm/golan/internal/ecm/service/builder"
 	"context"
 	"fmt"
 	log "github.com/sirupsen/logrus"
@@ -38,6 +39,9 @@ func StartServer(appCfg cfg.AppConfig) {
 	objectStore := objectstorefactory.GetObjectStore(appCfg)
 	s := service.ObjectStoreService{
 		ObjectStore: objectStore,
+		PropertyFieldHierarchy: builder.PropertyFieldHierarchy{
+			ObjectStore: objectStore,
+		},
 	}
 
 	pb.RegisterContentEngineServer(grpcServer, &s)

@@ -1,6 +1,18 @@
 package aws
 
-import "cjavellana.me/ecm/golan/internal/ecm/ce"
+import (
+	"cjavellana.me/ecm/golan/internal/ecm/ce"
+)
+
+// Workspace defines a boundary of a particular (business) process.
+// e.g. Sales Department, Finance Department, etc
+type Workspace struct {
+	*Document `bson:",inline"`
+}
+
+type Folder struct {
+	*Document `bson:",inline"`
+}
 
 type Document struct {
 	IsVersioningEnabled   bool            `bson:"IsVersioningEnabled"`

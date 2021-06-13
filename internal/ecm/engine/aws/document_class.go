@@ -6,7 +6,7 @@ import (
 )
 
 type DocumentClass struct {
-	// WorkspaceId refers to the object id of the workspace that this DocumentClass belongs to
+	// WorkspaceId refers to the Object id of the Workspace that this DocumentClass belongs to
 	WorkspaceId primitive.ObjectID `bson:"WorkspaceId,omitempty"`
 
 	// PropertyFields

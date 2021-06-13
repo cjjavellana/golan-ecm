@@ -24,41 +24,36 @@ func (dcOp *DocumentClassOperation) NewDocumentClass(
 	}
 }
 
-func (dcOp *DocumentClassOperation) SaveDocumentClass(documentClass ce.DocumentClass) (ce.DocumentClass, error) {
-	workspaceId, err := primitive.ObjectIDFromHex(documentClass.GetWorkspaceId())
+func (dcOp *DocumentClassOperation) SaveDocumentClass(dc ce.DocumentClass) (ce.DocumentClass, error) {
+	workspaceId, err := primitive.ObjectIDFromHex(dc.GetWorkspaceId())
 	if err != nil {
-		return documentClass, err
+		return dc, err
 	}
 
-	// ensure workspace exists
+	// ensure Workspace exists
 	findWorkspaceRes := dcOp.db.document.FindOne(context.TODO(), bson.M{
 		"_id": workspaceId,
 	})
 	if findWorkspaceRes.Err() != nil {
-		return documentClass, errors.New("workspace " + documentClass.GetWorkspaceId() + " does not exist")
+		return dc, errors.New("Workspace " + dc.GetWorkspaceId() + " does not exist")
 	}
 
 	// ensure no doc class of the same name exists
 	docClassExistRes := dcOp.db.documentClass.FindOne(context.TODO(), bson.M{
 		"WorkspaceId": workspaceId,
-		"Name":        documentClass.GetName(),
+		"Name":        dc.GetName(),
 	})
 	if docClassExistRes.Err() == nil {
-		return documentClass, errors.New("document class " + documentClass.GetName() + " already exist")
-	}
-
-	dc, ok := bson.Marshal(documentClass)
-	if ok != nil {
-		return documentClass, ok
+		return dc, errors.New("document class " + dc.GetName() + " already exist")
 	}
 
 	res, err := dcOp.db.documentClass.InsertOne(context.TODO(), dc)
 	if err != nil {
-		return documentClass, err
+		return dc, err
 	}
 
 	// set newly inserted id into the document class
-	documentClass.(*DocumentClass).ID = res.InsertedID.(primitive.ObjectID)
+	dc.(*DocumentClass).ID = res.InsertedID.(primitive.ObjectID)
 
-	return documentClass, nil
+	return dc, nil
 }
